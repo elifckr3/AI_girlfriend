@@ -1,0 +1,38 @@
+[project]
+name = "openhome"
+version = "0.1.0"
+description = "Opensource AI Smart Speaker"
+
+dependencies = [
+    "sounddevice~=0.4.6",
+    "soundfile~=0.12.1",
+    "numpy~=1.26.3",
+    "openai==0.28.0",
+    "colorama~=0.4.6",
+    "pydub~=0.25.1",
+    "pyyaml~=6.0.1",
+    "SpeechRecognition~=3.10.1",
+    "fuzzywuzzy~=0.18.0",
+    "python-Levenshtein~=0.24.0",
+    "spotipy~=2.23.0",
+    "pyaudio>=0.2.14",
+]
+
+requires-python = "==3.11.*"
+readme = "README.md"
+license = { text = "TBD" }
+
+
+[tool.pdm]
+distribution = false
+
+[tool.pdm.scripts]
+pre_install = "dev_scripts/pre_install.sh"
+post_install = "dev_scripts/post_install.sh"
+main.call = "openhome.main:main"
+main.env = { ENV = "DEV" }
+
+[tool.pdm.dev-dependencies]
+dev = [
+    "pyaudio>=0.2.14",
+]

@@ -1,0 +1,4 @@
+The user is currently navigating through a multifaceted emotional landscape. 
+The primary emotion dominating their feelings is {max_score_class}, which is accompanied by a gentle undercurrent of 
+{second_max_score_class}, and a subtle {third_max_score_class}. Considering these emotional states, please generate a
+response that captures the essence of each emotion while maintaining coherence and relevance.

@@ -41,11 +41,10 @@ Work in Progress Technical Architecture: https://docs.google.com/document/d/1PIn
 
 ## Install and configure
 
-To get the project running locally first create and spin up a conda environment as follows:
+To get the project running locally install pdm using python3
 
-```
-conda create -n openhome python=3.10
-conda activate openhome
+```bash
+curl -sSL https://pdm-project.org/install-pdm.py | python3 -
 ```
 
 Next install the required dependencies.
@@ -53,17 +52,9 @@ Next install the required dependencies.
 ### Install dependencies
 
 To install the required dependencies, run the following command:
-```
-python -m pip install -r requirements.txt 
-```
-Also install following:
-```
-pip install PyAudio
-```
-```
-sudo apt-get install libportaudio2
-sudo apt install ffmpeg
-sudo apt-get install portaudio19-dev
+
+```bash
+pdm install
 ```
 
 You can also use homebrew to install these modules. brew install ffmpeg, portaudio, etc
@@ -71,10 +62,8 @@ You can also use homebrew to install these modules. brew install ffmpeg, portaud
 
 To run the main pipeline, run the following command:
 
-```
-~ % cd /openhome
-~ % conda activate openhome
-~ % python main.py -p 1
+```python
+pdm run main.py -p 1
 ```
 
 - `<Enter personality>`: Pass your desired personality

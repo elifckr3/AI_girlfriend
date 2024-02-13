@@ -1,0 +1,65 @@
+[
+  {
+    "Command": "End session",
+    "Triggers": ["end", "turn off", "finish", "stop", "exit"],
+    "Library": "openhome/capabilities/end_session.py",
+    "Notes": "Ends the current session and turns off the smart speaker.",
+    "PauseMain": true
+  },
+  {
+  "Command": "Pause for 10 Seconds",
+  "Triggers": ["briefly pause"],
+  "Library": "openhome/capabilities/pause_for_10_seconds.py",
+  "Notes": "Pauses operation for 10 seconds.",
+  "PauseMain": true
+  },
+  {
+    "Command": "Update Brain",
+    "Triggers": ["Update Brain", "Learn"],
+    "Library": "openhome/capabilities/update_brain.py",
+    "Notes": "Updates the AI model with new data or algorithms.",
+    "PauseMain": false
+  },
+  {
+    "Command": "Call Uber",
+    "Triggers": ["Call an Uber", "Call a Lyft"],
+    "Library": "openhome/capabilities/call_uber.py",
+    "Notes": "Initiates a request for a ride-sharing service.",
+    "PauseMain": false
+  },
+  {
+    "Command": "Set Alarm",
+    "Triggers": ["Set alarm for", "Wake me up at"],
+    "Library": "openhome/capabilities/set_alarm.py",
+    "Notes": "Sets an alarm for a specified time.",
+    "PauseMain": false
+  },
+  {
+    "Command": "Play Music",
+    "Triggers": ["play music", "start playing", "spotify"],
+    "Library": "openhome/capabilities/play_music.py",
+    "Notes": "Begins playing music from a predefined playlist or based on user preference.",
+    "PauseMain": true
+  },
+  {
+    "Command": "Build Personality",
+    "Triggers": ["Build Personality"],
+    "Library": "openhome/capabilities/build_personality.py",
+    "Notes": "Builds a new custom personality",
+    "PauseMain": true
+  },
+  {
+    "Command": "Check Weather",
+    "Triggers": ["What's the weather", "Weather update"],
+    "Library": "openhome/capabilities/check_weather.py",
+    "Notes": "Provides the latest weather forecast for a specified location.",
+    "PauseMain": false
+  },
+  {
+    "Command": "Switch Personality",
+    "Triggers": ["switch personality", "switch assistant"],
+    "Library": "openhome/capabilities/switch_personality.py",
+    "Notes": "Swithces the personality to desired onoe available",
+    "PauseMain": false
+  }
+]

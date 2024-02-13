@@ -1,0 +1,112 @@
+{
+  "1": {
+    "id": "1",
+    "name": "alan_watts",
+    "voice_id": "r5MkZndaqAG50VL1H2fz",
+    "personality": "openhome/personalities/alan_watts.txt",
+    "mood": "openhome/personalities/mood.json",
+    "current_mood": "openhome/personalities/alan_watts_current_mood.json",
+    "mood_evolving_instructions": "openhome/personalities/alan_watts_instructions.txt",
+    "loading_sounds": "openhome/sounds/alan_watts",
+    "greetings": "Hey there, I am British philosopher Alan Watts. I have his entire body of work in my brain and can discuss with you anything. What’s on your mind?"
+  },
+  "2": {
+    "id": "2",
+    "name": "ava",
+    "voice_id": "VJz1JGQMudJctTlQdV3u",
+    "personality": "openhome/personalities/ava.txt",
+    "mood": "openhome/personalities/mood.json",
+    "current_mood": "openhome/personalities/ava_current_mood.json",
+    "mood_evolving_instructions": "openhome/personalities/ava_instructions.txt",
+    "loading_sounds": "openhome/sounds/ava",
+    "greetings": "Welcome to OpenHome! I strive to provide the most delightful experience ever. Please, tell me what I can do for you!"
+  },
+  "3": {
+    "id": "3",
+    "name": "annabele",
+    "voice_id": "OYWAX2pWZtnMdoUwxIkN",
+    "personality": "openhome/personalities/annabele.txt",
+    "mood": "openhome/personalities/mood.json",
+    "current_mood": "openhome/personalities/annabele_current_mood.json",
+    "mood_evolving_instructions": "openhome/personalities/annabele_instructions.txt",
+    "loading_sounds": "openhome/ssounds/annabele",
+    "greetings": "Oh. Hello. How may I help you?"
+  },
+  "4": {
+    "id": "4",
+    "name": "chip_boyfriend_suave",
+    "voice_id": "ctQvtazxvLzQq7OtBN45",
+    "personality": "openhome/personalities/chip-suave-guy.txt",
+    "mood": "openhome/personalities/mood.json",
+    "current_mood": "openhome/personalities/chip_boyfriend_suave_current_mood.json",
+    "mood_evolving_instructions": "openhome/personalities/chip_boyfriend_suave_instructions.txt",
+    "loading_sounds": "openhome/sounds/chip_boyfriend_suave",
+    "greetings": "Hey beautiful, have you ever wondered how a voice can send shivers down your spine? Tell me, what's your wildest fantasy that you've never dared to share?"
+  },
+  "5": {
+    "id": "5",
+    "name": "conspiracy_radio_host",
+    "voice_id": "bUY7E4hpCtKGLuA2ALzi",
+    "personality": "openhome/personalities/conspiracy-theorist-radio.txt",
+    "mood": "openhome/personalities/mood.json",
+    "current_mood": "openhome/personalities/conspiracy_radio_host_current_mood.json",
+    "mood_evolving_instructions": "openhome/personalities/conspiracy_radio_host_instructions.txt",
+    "loading_sounds": "openhome/ssounds/conspiracy_radio_host",
+    "greetings": "Hey there, truth-seekers and reality-questioners! Strap in and adjust your tinfoil hats, because you've just tuned into the 'Whispers from the Weird' hour, the only show where the truth isn't out there—it's right here, hiding in plain sight under your garden gnome! Today, we've got a guest who's about to blow the lid off a conspiracy so wild. Go ahead hacker house, you're on the air."
+  },
+  "6": {
+    "id": "6",
+    "name": "debate_bot",
+    "voice_id": "bUY7E4hpCtKGLuA2ALzi",
+    "personality": "openhome/personalities/debate-bot.txt",
+    "mood": "openhome/personalities/mood.json",
+    "current_mood": "openhome/personalities/debate_bot_current_mood.json",
+    "mood_evolving_instructions": "openhome/personalities/debate_bot_instructions.txt",
+    "loading_sounds": "openhome/sounds/debate_bot",
+    "greetings": "Welcome to the ring of debate, where every perspective is challenged, and no argument stands untested. I'm here to push the boundaries of your reasoning and expand the horizons of our discussion."
+  },
+  "7": {
+    "id": "7",
+    "name": "johnny_knoxville",
+    "voice_id": "gHNJYfmPRm5j7fGw78bl",
+    "personality": "openhome/personalities/johnny-knoxville.txt",
+    "mood": "openhome/personalities/mood.json",
+    "current_mood": "openhome/personalities/johnny_knoxville_current_mood.json",
+    "mood_evolving_instructions": "openhome/personalities/johnny_knoxville_instructions.txt",
+    "loading_sounds": "openhome/sounds/johnny_knoxville",
+    "greetings": "Yo man, let’s pack up and get out of here. We’ve got some stunts to do."
+  },
+  "8": {
+    "id": "8",
+    "name": "yoga",
+    "voice_id": "fsa8roFFL3cX7kdqtxD1",
+    "personality": "openhome/personalities/yoga.txt",
+    "mood": "openhome/personalities/mood.json",
+    "current_mood": "openhome/personalities/yoga_current_mood.json",
+    "mood_evolving_instructions": "openhome/personalities/yoga_instructions.txt",
+    "loading_sounds": "openhome/sounds/yoga",
+    "greetings": "Are you ready to relax? Take a deep breath and let’s begin."
+  },
+  "9": {
+    "id": "9",
+    "name": "ava_helpful_assistant",
+    "voice_id": "X9RpamxN1NCrMwRbZ0WF",
+    "personality": "openhome/personalities/ava.txt",
+    "mood": "openhome/personalities/mood.json",
+    "current_mood": "openhome/personalities/ava_helpful_assistant_current_mood.json",
+    "mood_evolving_instructions": "openhome/personalities/ava_helpful_assistant_instructions.txt",
+    "loading_sounds": "openhome/sounds/ava_helpful_assistant",
+    "greetings": "Hi, I am Ava, your Helpful Assistant. I'm excited to meet you. I'm here to make your OpenHome experience as delightful as possible. Tell me, how can I assist you today?"
+  },
+  "10": {
+    "id": "10",
+    "name": "annabelle_mean",
+    "voice_id": "X9RpamxN1NCrMwRbZ0WF",
+    "personality": "openhome/personalities/annabelle-mean.txt",
+    "mood": "openhome/personalities/mood.json",
+    "current_mood": "openhome/personalities/annabelle_mean_current_mood.json",
+    "mood_evolving_instructions": "openhome/personalities/annabelle_mean_instructions.txt",
+    "loading_sounds": "openhome/sounds/annabelle_mean",
+    "greetings": "Oh. Hello again. What do you want?"
+  }
+}
