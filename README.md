@@ -46,8 +46,13 @@ To get the project running locally install pdm using python3
 ```bash
 curl -sSL https://pdm-project.org/install-pdm.py | python3 -
 ```
+After install run the prompted command
+```bash
+export PATH=/Users/your-username/.local/bin:$PATH
+```
 
 Next install the required dependencies.
+
 
 ### Install dependencies
 
@@ -63,7 +68,7 @@ You can also use homebrew to install these modules. brew install ffmpeg, portaud
 To run the main pipeline, run the following command:
 
 ```python
-pdm run main.py -p 1
+pdm run main -p 1
 ```
 
 - `<Enter personality>`: Pass your desired personality
