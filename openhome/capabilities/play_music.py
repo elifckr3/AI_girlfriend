@@ -25,7 +25,7 @@ def get_random_track(spotifyObject):
     return random_track
 
 # Used to Play song on spotify
-def play_song(search_song=''):
+def main(message, personality, resume_event, search_song=''):
     if platform.system() == 'Linux':
         try:
             # Command to open Spotify installed via Snap on Ubuntu

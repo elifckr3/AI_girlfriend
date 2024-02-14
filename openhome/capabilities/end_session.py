@@ -1,3 +1,3 @@
 
-def end_session():
+def main(message, personality, resume_event):
     exit()
