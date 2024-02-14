@@ -83,7 +83,7 @@ def main(personality, conversation, mood_json, mood_instructions):
 
         # Handle action feedback for pausing and user feedback
         if action_feedback and action_feedback.get('feedback'):
-            if action_feedback['command'] == "Switch Personality" and "result" in action_feedback['feedback']:
+            if action_feedback['command'] == "Switch Personality" and action_feedback['feedback']['result'] is not None:
                 personality = dict(action_feedback['feedback']['result'])
             # Check if feedback is in expected dict format and extract message
             feedback_message = action_feedback['feedback']['feedback'] if isinstance(action_feedback['feedback'], dict) else action_feedback['feedback']

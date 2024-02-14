@@ -1,6 +1,24 @@
 import re
 from openhome.utility import load_json
+from fuzzywuzzy import process
+import sys
+import traceback
 def main(message, personality, resume_event):
+    """
+    This function takes user message with switch personality command current personality nd resme event arguments and return
+    updated personality.
+
+    Args:
+        message (str): muser text message for switching persoanlity.
+        personality (dict): personality idct object.
+        resume_event (bool): resume_event is not use in this function but for dynamic syyncronization of calls to all main functions of 
+        capabilities modules in capabilities manger capabilites for loop.
+
+    Returns:
+        dict: A dictionary with the following keys:
+            'feedback': message to be play using text to speech module..
+            'result': personality object(dict) if found else NOne.
+    """
     # replce number in case if they are in letters
     message = message.replace("one", "1").replace("two", "2").replace("three", "3").replace('four', "4")
     message = message.replace('five',"5").replace('six',"6").replace('seven',"7").replace('eight',"8")
@@ -15,31 +33,47 @@ def main(message, personality, resume_event):
         personality_id = re.findall(r'\d+', message)
         if personality_id:
             personality_id = personality_id[0]
-            personality = peronalities_json[personality_id]
-            feedback = personality['greetings']
-        else:
-            # get names of all personalities available
-            peronalities_name = [peronalities_json[person_id].get('name').replace('_', ' ') for person_id in peronalities_json]
-            regex_pattern = "|".join(peronalities_name)  # Creates a pattern like 'ava|alan watts|annabele'
-            personality_name = re.findall(regex_pattern, message)
-            if peronalities_name:
-                # get the name and if it contains space join it with under score and strip leading and trailing spaces.
-                personality_name = personality_name[0].replace(' ', '_').strip()
-                for id in peronalities_json:
-                    if peronalities_json[id]['name'] == peronalities_name:
-                        personality_id = id
-                        break
+            if personality_id in peronalities_json:
                 personality = peronalities_json[personality_id]
                 feedback = personality['greetings']
+        else:
+            # get names of all personalities available
+            peronalities_name = [peronalities_json[person_id]['name'].replace('_', ' ') for person_id in peronalities_json]
+            # get the name and if it contains space join it with under score and strip leading and trailing spaces.
+            # Use process.extractOne to find the best match
+            # print(peronalities_name)
+            best_match = process.extractOne(message, peronalities_name)
+            # print('best match',best_match)
+            # Check if the best match has a high enough score to consider it a match
+            # Adjust the threshold as needed (default is  80)
+            if best_match and best_match[1] >=  80:
+                for person_id in peronalities_json:
+                    if best_match[0].replace(' ', "_") == peronalities_json[person_id]['name']:
+                        personality_id = person_id
+                        # print(personality_id)
+                        # get the personality dict from its id
+                        personality = peronalities_json[personality_id]
+                        feedback = personality['greetings']
+                        break
         # finally check if we hae got personality or not
         if personality is None:
-            feedback = "The personality you provided is not in existing ones, please choose a valid option from 1,2 and 3."
+            feedback = "The personality you provided is not in existing ones, please choose a valid option from 1,2, 3 so on to 10"
         return {
             "feedback": feedback,
             "result":personality
         }
     except Exception as e:
-        print(e)
+        exc_type, exc_value, exc_traceback = sys.exc_info()
+        traceback_details = {
+            'filename': exc_traceback.tb_frame.f_code.co_filename,
+            'lineno': exc_traceback.tb_lineno,
+            'name': exc_traceback.tb_frame.f_code.co_name,
+            'type': exc_type.__name__,
+            'message': str(exc_value)
+        }
+        print(f"An error of type {traceback_details['type']} occurred on line "
+            f"{traceback_details['lineno']} in {traceback_details['filename']}. "
+            f"Error message: {traceback_details['message']}")
         feedback = "Exception occurs %s" %e
         return {
             "feedback": feedback,
