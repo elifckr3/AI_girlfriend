@@ -1,19 +1,19 @@
-from openhome.personalities_manager import load_personality
-from openhome.utility import load_json
+# from openhome.personalities_manager import load_personality
+from utility import load_json
 import requests
 import yaml
 from pydub import AudioSegment
 from pydub.playback import play
-
+import os
 # Open the yaml file
-with open('config.yaml', 'r', encoding='utf-8') as file:
+with open('openhome/config.yaml', 'r', encoding='utf-8') as file:
     # Load all the data from the YAML file
     file_data = yaml.safe_load(file)
 
 
 def generate_sounds(api_key, personality):
         voice_id = personality['voice_id']
-        sounds = ['umm...', 'hmmm...', 'ok...', 'uh...', 'uhmm well..', 'got it...']
+        sounds = ['hmmm...', 'ok...', 'uh...']
         print(voice_id)
         for sound in sounds:
             url = f'https://api.elevenlabs.io/v1/text-to-speech/{voice_id}'
@@ -33,17 +33,20 @@ def generate_sounds(api_key, personality):
             response = ''
             # this try blocks check if the eleven lab api returns desired response or not.
             try:
-                # response = requests.post(url, headers=headers, json=data)
-                # with open('sounds/'+personality['name']+'/'+sound+'.mp3', 'wb') as f:
-                #     f.write(response.content)
-                audio = AudioSegment.from_mp3('sounds/'+personality['name']+'/'+sound+'.mp3')
+                response = requests.post(url, headers=headers, json=data)
+                with open('openhome/sounds/'+personality['name']+'/'+sound+'.mp3', 'wb') as f:
+                    f.write(response.content)
+                audio = AudioSegment.from_mp3('openhome/sounds/'+personality['name']+'/'+sound+'.mp3')
                 play(audio)
             except Exception as e:
                 print(e)
                 continue
 
 
-personalities = load_json('personalities/personalities.json')
+personalities = load_json('openhome/personalities/personalities.json')
 for p_key in personalities:
     personality  = personalities[p_key]
+    # Ensure the directory exists
+    directory_path = 'openhome/sounds/' + personality['name']
+    os.makedirs(directory_path, exist_ok=True)
     generate_sounds(file_data['elevenlabs_api_key'], personality)

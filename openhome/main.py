@@ -83,6 +83,8 @@ def main(personality, conversation, mood_json, mood_instructions):
 
         # Handle action feedback for pausing and user feedback
         if action_feedback and action_feedback.get('feedback'):
+            if action_feedback['command'] == "Switch Personality" and "result" in action_feedback['feedback']:
+                personality = dict(action_feedback['feedback']['result'])
             # Check if feedback is in expected dict format and extract message
             feedback_message = action_feedback['feedback']['feedback'] if isinstance(action_feedback['feedback'], dict) else action_feedback['feedback']
             # Check if feedback_message is a list or a single message, then iterate or directly convert to speech
@@ -90,12 +92,19 @@ def main(personality, conversation, mood_json, mood_instructions):
                 for message in feedback_message:
                     print(f'Action Feedback: {message}')
                     # Convert this feedback to speech
-                    text_to_speech(message, personality['voice_id'], file_data['elevenlabs_api_key'])
+                    text_to_speech(str(message), personality['voice_id'], file_data['elevenlabs_api_key'])
+                    # call the conversation manager to mantin conversation
+                    conversation = manage_conversation(str(message),conversation, role='assistant')
+                    return conversation, mood_json, personality
             else:
+                # convert message in str may other types can cause errors.
+                feedback_message = str(feedback_message)
                 print(f'Action Feedback: {feedback_message}')
                 # Convert this feedback to speech
                 text_to_speech(feedback_message, personality['voice_id'], file_data['elevenlabs_api_key'])
-
+                # call the conversation manager to mantin conversation
+                conversation = manage_conversation(feedback_message,conversation, role='assistant')
+                return conversation, mood_json, personality
             if action_feedback.get('pauseMain'):
                 print('Pausing main conversation loop as requested by action.')
                 # Assuming action_feedback includes a 'resumeEvent' to wait on
@@ -105,8 +114,8 @@ def main(personality, conversation, mood_json, mood_instructions):
 
         # Check if the message was valid to continue processing
         if not is_valid_message:
-            return conversation, mood_json
-
+            return conversation, mood_json, personality
+ 
         # mood evolver function and the rest of your logic follows here...
         # print('Generating customized Mood prompt.')
         # start_time = time()
@@ -174,7 +183,7 @@ def main(personality, conversation, mood_json, mood_instructions):
     end_time = time()
     total_time =  end_time - start_time
     print('Text to Speech conversion completed in', total_time)
-    return conversation, mood_json
+    return conversation, mood_json, personality
 
 
 # get current mood from json
@@ -187,4 +196,4 @@ with open('openhome/personalities/mood_evolving_instruction.txt', 'r') as file:
 conversation = []
 while True:
     print('Starting')
-    conversation,mood_json = main(personality, conversation, mood_json, mood_instructions)
+    conversation,mood_json,personality = main(personality, conversation, mood_json, mood_instructions)

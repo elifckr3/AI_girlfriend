@@ -76,7 +76,10 @@ def main(message, personality, resume_event, search_song=''):
         spotifyObject.start_playback(device_id=device_id, context_uri=None, uris=["spotify:track:"+track_id], offset=None)
     except spotipy.exceptions.SpotifyException as e:
         print(e)
-    return
+    return {
+        "feedback": chat_response,
+        "result": "",
+    }
 
 # Used to Install Spotify app
 def install_spotify():

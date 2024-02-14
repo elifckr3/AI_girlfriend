@@ -13,9 +13,9 @@ def play_loading_sound(directory_path):
     Args:
         path (str): audio file path to paly.
     """
+    file_full_path = get_random_file(directory_path)
     while openhome.app_globals.play_loading_sound_global:
         sleep(openhome.app_globals.sleep)
-        file_full_path = get_random_file(directory_path)
         audio = AudioSegment.from_mp3(file_full_path)
         play(audio)
         
