@@ -50,7 +50,7 @@ personality = load_personality(personality_id=personality_id)
 
 
 # define the main function to call all functions pressetn in modules
-def main(personality, conversation, mood_json, mood_instructions):
+def main(personality, conversation, mood_prompt_template, emotion_detection_prompt):
     """
     Main function takes personality, consersation,mood json and mood instructions to run the whole proceses for the passed conversation using specified 
     personality.
@@ -58,12 +58,10 @@ def main(personality, conversation, mood_json, mood_instructions):
     Args:
         personality (str): Personality entered by user while running the main script.
         conversation (list): List of messages from user and asistant as a history.
-        mood_json (dict): Averaged moods weights stored in mood.json.
-        mood_instructions (str): Instructions string from mood evolving instruction text file.
+        mood_prompt_template (str): Instructions string from mood evolving instruction text file.
 
     Returns:
         conversation (list): Updated list of messages from user and asistant as a history.
-        mood_json (dict): Averaged moods weights calculated from mood evolver.
     """
     # if conversation has something record user data else say greetings.
     if conversation:
@@ -95,7 +93,7 @@ def main(personality, conversation, mood_json, mood_instructions):
                     text_to_speech(str(message), personality['voice_id'], file_data['elevenlabs_api_key'])
                     # call the conversation manager to mantin conversation
                     conversation = manage_conversation(str(message),conversation, role='assistant')
-                    return conversation, mood_json, personality
+                    return conversation, personality
             else:
                 # convert message in str may other types can cause errors.
                 feedback_message = str(feedback_message)
@@ -104,7 +102,7 @@ def main(personality, conversation, mood_json, mood_instructions):
                 text_to_speech(feedback_message, personality['voice_id'], file_data['elevenlabs_api_key'])
                 # call the conversation manager to mantin conversation
                 conversation = manage_conversation(feedback_message,conversation, role='assistant')
-                return conversation, mood_json, personality
+                return conversation, personality
             if action_feedback.get('pauseMain'):
                 print('Pausing main conversation loop as requested by action.')
                 # Assuming action_feedback includes a 'resumeEvent' to wait on
@@ -114,27 +112,21 @@ def main(personality, conversation, mood_json, mood_instructions):
 
         # Check if the message was valid to continue processing
         if not is_valid_message:
-            return conversation, mood_json, personality
+            return conversation, personality
  
         # mood evolver function and the rest of your logic follows here...
-        # print('Generating customized Mood prompt.')
-        # start_time = time()
 
-
-        
 
         # if we want to set cusotmzied mood propmt set this global vairbale in globals to True.
-        if openhome.app_globals.MOOD_EVOLVER_ENABLED:
-            mood_prompt, mood_json = mood_evolver(user_message, mood_json, mood_instructions)
+        if openhome.app_globals.MOOD_EVOLVER_ENABLED and len(conversation) >= 4:
+            mood_evolving_thread = threading.Thread(target=mood_evolver, args=(mood_prompt_template,file_data['openai_api_key'], emotion_detection_prompt))
+            mood_evolving_thread.daemon = True
+            mood_evolving_thread.start()
             # combine the initial and mood customized prompts
+            openhome.app_globals.MOOD_EVOLVER_ENABLED = False
+        prompt = get_customized_prompt(initial_prompt=personality['personality'])
 
-            prompt = get_customized_prompt(mood_prompt, initial_prompt=personality['personality'])
-            end_time = time()
-            total_time = end_time - start_time
-            print('Customized prompt generation and mood detection completed in', total_time)
-        else:
-            prompt = personality['personality']
-
+        print(Fore.RED + f"prompt: {prompt}" + Style.RESET_ALL, end="'\n")
         # Start the loading function that runs till the chatgpt function's response  in a separate thread
         loading_thread = threading.Thread(target=play_loading_sound, args=(personality['loading_sounds'],))
         loading_thread.daemon = True
@@ -148,6 +140,8 @@ def main(personality, conversation, mood_json, mood_instructions):
         loading_thread.join()
         # set again the global variable to true to play sond again till the geenration of customized prompt.
         openhome.app_globals.play_loading_sound_global = False
+        # update the global conversation variable to be used in mood evolving.
+        openhome.app_globals.conversation = conversation
         end_time = time()
         total_time = end_time - start_time
         print('Chatgpt response generation completed in', total_time)
@@ -183,17 +177,23 @@ def main(personality, conversation, mood_json, mood_instructions):
     end_time = time()
     total_time =  end_time - start_time
     print('Text to Speech conversion completed in', total_time)
-    return conversation, mood_json, personality
+    return conversation, personality
 
 
 # get current mood from json
 mood_json = load_json(path='openhome/personalities/mood.json')
+# assign mood json to a global variable as we are implementing threading and we cannot get back values  from threaded function so easily.
+openhome.app_globals.mood_json = mood_json
 # read instructions file.
-mood_instructions = ''
+mood_prompt_template = ''
 with open('openhome/personalities/mood_evolving_instruction.txt', 'r') as file:
     # Read the entire contents of the file into a variable
-    mood_instructions = file.read()
+    mood_prompt_template = file.read()
+# read the prompt to pass on to chatgpt for emotion detection.   
+with open('openhome/personalities/emotion_detection_prompt.txt', 'r') as file:
+    # Read the entire contents of the file into a variable
+    emotion_detection_prompt = file.read()
 conversation = []
 while True:
     print('Starting')
-    conversation,mood_json,personality = main(personality, conversation, mood_json, mood_instructions)
+    conversation, personality = main(personality, conversation, mood_prompt_template, emotion_detection_prompt)
