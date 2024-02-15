@@ -84,7 +84,6 @@ def mood_evolver(mood_prompt_template, api_key, emotion_detection_prompt):
     conversation = openhome.app_globals.conversation
     mood_json = openhome.app_globals.mood_json
     # call chatgpt function for emotion detection
-    print(api_key, conversation, emotion_detection_prompt)
     emotion = chatgpt(api_key, conversation, emotion_detection_prompt)
 
     # Convert emotion and scores in dict
