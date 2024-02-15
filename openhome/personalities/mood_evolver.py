@@ -135,7 +135,5 @@ def get_customized_prompt(initial_prompt):
         prompt: prompt to begiven to chatgpt, combination of customized mood prompt and initla prompt.
     """
     mood_prompt = openhome.app_globals.customized_mood_prompt
-    print('concatenating  prompts')
-    print(mood_prompt)
     prompt = initial_prompt + " " + mood_prompt
     return prompt

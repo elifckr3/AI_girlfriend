@@ -125,8 +125,7 @@ def main(personality, conversation, mood_prompt_template, emotion_detection_prom
             # combine the initial and mood customized prompts
             openhome.app_globals.MOOD_EVOLVER_ENABLED = False
         prompt = get_customized_prompt(initial_prompt=personality['personality'])
-
-        print(Fore.RED + f"prompt: {prompt}" + Style.RESET_ALL, end="'\n")
+        
         # Start the loading function that runs till the chatgpt function's response  in a separate thread
         loading_thread = threading.Thread(target=play_loading_sound, args=(personality['loading_sounds'],))
         loading_thread.daemon = True
