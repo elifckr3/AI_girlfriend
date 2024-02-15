@@ -37,12 +37,14 @@ def main(message, personality, resume_event):
                 personality = peronalities_json[personality_id]
                 feedback = personality['greetings']
         else:
+            personality_name = message.split("to ")[1].split(" ")[0].replace(".","").lower()
+            print(personality_name)
             # get names of all personalities available
-            peronalities_name = [peronalities_json[person_id]['name'].replace('_', ' ') for person_id in peronalities_json]
+            peronalities_name = [peronalities_json[person_id]['name'].replace('_', ' ').lower() for person_id in peronalities_json]
             # get the name and if it contains space join it with under score and strip leading and trailing spaces.
             # Use process.extractOne to find the best match
             # print(peronalities_name)
-            best_match = process.extractOne(message, peronalities_name)
+            best_match = process.extractOne(personality_name, peronalities_name)
             # print('best match',best_match)
             # Check if the best match has a high enough score to consider it a match
             # Adjust the threshold as needed (default is  80)
