@@ -80,47 +80,48 @@ def mood_evolver(mood_prompt_template, api_key, emotion_detection_prompt):
         prompt (str): Customized prompt only for mood.
         average_mood_dict (dict): Dictioanry to be passed in next iteration to forbide file reading again and again.
     """
-    while True:
-        conversation = openhome.app_globals.conversation
-        mood_json = openhome.app_globals.mood_json
-        # call chatgpt function for emotion detection
-        emotion = chatgpt(api_key, conversation, emotion_detection_prompt)
+    # while True:
+    conversation = openhome.app_globals.conversation
+    mood_json = openhome.app_globals.mood_json
+    # call chatgpt function for emotion detection
+    print(api_key, conversation, emotion_detection_prompt)
+    emotion = chatgpt(api_key, conversation, emotion_detection_prompt)
 
-        # Convert emotion and scores in dict
-        emotions_with_scores = string_to_dict(emotion)
-        print('current moode scores', emotions_with_scores)
-        average_mood_dict = average_dict_values(emotions_with_scores, mood_json)
-        average_mood_dict = sort_dictionary(average_mood_dict)
-        print('Averaged', average_mood_dict)
-        # store average mood dictonary to our json
-        write_json(path='openhome/personalities/mood.json', data=average_mood_dict)
-        # store current mood dictonary to our json
-        write_json(path='openhome/personalities/current_mood.json', data=emotions_with_scores)
-        # prepare prompt
-        # get keys of sorted average dictionary into list to get them by index.
-        moods_values = list(average_mood_dict.keys())
-        # check if modes_values has three or more classes/values in it.
-        try:
-            # get emotion with heighest score.
-            max_score_class = moods_values[0]
-            # get emotion with second heighest score.
-            second_max_score_class = moods_values[1]
-            # get emotion with third heighest score.
-            third_max_score_class = moods_values[2]
-        # In exception case put the first class in all modes.
-        except Exception as e:
-            # get emotion with heighest score.
-            max_score_class = moods_values[0]
-            # get emotion with second heighest score.
-            second_max_score_class = moods_values[0]
-            # get emotion with third heighest score.
-            third_max_score_class = moods_values[0] 
-        prompt = mood_prompt_template.format(max_score_class = max_score_class, 
-                                    second_max_score_class = second_max_score_class,
-                                    third_max_score_class = third_max_score_class )
-        openhome.app_globals.mood_json = average_mood_dict
-        openhome.app_globals.customized_mood_prompt = prompt
-        sleep(5)
+    # Convert emotion and scores in dict
+    emotions_with_scores = string_to_dict(emotion)
+    print('current moode scores', emotions_with_scores)
+    average_mood_dict = average_dict_values(emotions_with_scores, mood_json)
+    average_mood_dict = sort_dictionary(average_mood_dict)
+    print('Averaged', average_mood_dict)
+    # store average mood dictonary to our json
+    write_json(path='openhome/personalities/mood.json', data=average_mood_dict)
+    # store current mood dictonary to our json
+    write_json(path='openhome/personalities/current_mood.json', data=emotions_with_scores)
+    # prepare prompt
+    # get keys of sorted average dictionary into list to get them by index.
+    moods_values = list(average_mood_dict.keys())
+    # check if modes_values has three or more classes/values in it.
+    try:
+        # get emotion with heighest score.
+        max_score_class = moods_values[0]
+        # get emotion with second heighest score.
+        second_max_score_class = moods_values[1]
+        # get emotion with third heighest score.
+        third_max_score_class = moods_values[2]
+    # In exception case put the first class in all modes.
+    except Exception as e:
+        # get emotion with heighest score.
+        max_score_class = moods_values[0]
+        # get emotion with second heighest score.
+        second_max_score_class = moods_values[0]
+        # get emotion with third heighest score.
+        third_max_score_class = moods_values[0] 
+    prompt = mood_prompt_template.format(max_score_class = max_score_class, 
+                                second_max_score_class = second_max_score_class,
+                                third_max_score_class = third_max_score_class )
+    openhome.app_globals.mood_json = average_mood_dict
+    openhome.app_globals.customized_mood_prompt = prompt
+    # sleep(5)
 
 
 def get_customized_prompt(initial_prompt):

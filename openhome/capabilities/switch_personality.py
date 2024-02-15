@@ -37,18 +37,16 @@ def main(message, personality, resume_event):
                 personality = peronalities_json[personality_id]
                 feedback = personality['greetings']
         else:
-            personality_name = message.split("to ")[1].split(" ")[0].replace(".","").lower()
-            print(personality_name)
+            message = message.lower()
             # get names of all personalities available
-            peronalities_name = [peronalities_json[person_id]['name'].replace('_', ' ').lower() for person_id in peronalities_json]
+            personality_names = [peronalities_json[person_id]['name'].replace('_', ' ').lower() for person_id in peronalities_json]
             # get the name and if it contains space join it with under score and strip leading and trailing spaces.
             # Use process.extractOne to find the best match
-            # print(peronalities_name)
-            best_match = process.extractOne(personality_name, peronalities_name)
-            # print('best match',best_match)
+            best_match = process.extractOne(message, personality_names)
+            print('best match of personality: ',best_match)
             # Check if the best match has a high enough score to consider it a match
             # Adjust the threshold as needed (default is  80)
-            if best_match and best_match[1] >=  80:
+            if best_match and best_match[1] >=  60:
                 for person_id in peronalities_json:
                     if best_match[0].replace(' ', "_") == peronalities_json[person_id]['name']:
                         personality_id = person_id
@@ -57,9 +55,16 @@ def main(message, personality, resume_event):
                         personality = peronalities_json[personality_id]
                         feedback = personality['greetings']
                         break
+            
         # finally check if we hae got personality or not
         if personality is None:
-            feedback = "The personality you provided is not in existing ones, please choose a valid option from 1,2, 3 so on to 10"
+            personality_names = [peronalities_json[person_id]['name'].replace('_', ' ').lower() + " " for person_id in peronalities_json]
+            total_available_personalities = len(personality_names)
+            personality_names = personality_names[0:5]
+            available_personalities = ""
+            for personality_name in personality_names:
+                available_personalities += personality_name + " "
+            feedback = "The personality you provided is not in existing ones, please choose a valid option, some of available personalities are %s or you can provide a number from 1,2,3 so on till %s"%(available_personalities,total_available_personalities)
         return {
             "feedback": feedback,
             "result":personality
