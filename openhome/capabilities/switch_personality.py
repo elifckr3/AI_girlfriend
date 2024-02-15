@@ -3,6 +3,8 @@ from openhome.utility import load_json
 from fuzzywuzzy import process
 import sys
 import traceback
+from colorama import Fore, Style
+
 def main(message, personality, resume_event):
     """
     This function takes user message with switch personality command current personality nd resme event arguments and return
@@ -37,16 +39,18 @@ def main(message, personality, resume_event):
                 personality = peronalities_json[personality_id]
                 feedback = personality['greetings']
         else:
-            message = message.lower()
+            message = message.lower().split("to")
+            message = message[1] if len(message) > 1 else message[0]
             # get names of all personalities available
             personality_names = [peronalities_json[person_id]['name'].replace('_', ' ').lower() for person_id in peronalities_json]
             # get the name and if it contains space join it with under score and strip leading and trailing spaces.
             # Use process.extractOne to find the best match
             best_match = process.extractOne(message, personality_names)
-            print('best match of personality: ',best_match)
+            print(f"Best match of personality: {best_match}")
             # Check if the best match has a high enough score to consider it a match
             # Adjust the threshold as needed (default is  80)
             if best_match and best_match[1] >=  60:
+                print(Fore.GREEN + f"Switching Personality to: {best_match}" + Style.RESET_ALL, end="'\n")
                 for person_id in peronalities_json:
                     if best_match[0].replace(' ', "_") == peronalities_json[person_id]['name']:
                         personality_id = person_id
@@ -58,12 +62,12 @@ def main(message, personality, resume_event):
             
         # finally check if we hae got personality or not
         if personality is None:
-            personality_names = [peronalities_json[person_id]['name'].replace('_', ' ').lower() + " " for person_id in peronalities_json]
+            personality_names = [peronalities_json[person_id]['name'].replace('_', ' ').lower() for person_id in peronalities_json]
             total_available_personalities = len(personality_names)
             personality_names = personality_names[0:5]
             available_personalities = ""
             for personality_name in personality_names:
-                available_personalities += personality_name + " "
+                available_personalities += personality_name + ", "
             feedback = "The personality you provided is not in existing ones, please choose a valid option, some of available personalities are %s or you can provide a number from 1,2,3 so on till %s"%(available_personalities,total_available_personalities)
         return {
             "feedback": feedback,

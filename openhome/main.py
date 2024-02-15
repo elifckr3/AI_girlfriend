@@ -67,7 +67,7 @@ def main(personality, conversation, mood_prompt_template, emotion_detection_prom
     if conversation:
         # call record_and_transcribe to record user and convert it to text
         user_message = record_and_transcribe(file_data['openai_api_key'])
-
+        print(Fore.RED + f"{user_message}" + Style.RESET_ALL, end="'\n")
         # call the conversation manager to maintain conversation
         conversation = manage_conversation(user_message, conversation, role='user')
 
