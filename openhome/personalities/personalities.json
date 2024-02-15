@@ -108,5 +108,38 @@
     "mood_evolving_instructions": "openhome/personalities/annabelle_mean_instructions.txt",
     "loading_sounds": "openhome/sounds/annabelle_mean",
     "greetings": "Oh. Hello again. What do you want?"
+  },
+  "11": {
+    "id": "11",
+    "name": "john",
+    "voice_id": "fsa8roFFL3cX7kdqtxD1",
+    "personality": "openhome/personalities/john.txt",
+    "mood": "openhome/personalities/mood.json",
+    "current_mood": "openhome/personalities/current_mood.json",
+    "mood_evolving_instructions": "openhome/personalities/mood_evolving_instruction.txt",
+    "loading_sounds": "openhome/sounds/yoga",
+    "greetings": "HI,I am John, the well-known Pet Care consultant, known for your expertise in taking care of pets by observing their behavior and biology."
+  },
+  "12": {
+    "id": "12",
+    "name": "vickey",
+    "voice_id": "gHNJYfmPRm5j7fGw78bl",
+    "personality": "openhome/personalities/vickey.txt",
+    "mood": "openhome/personalities/mood.json",
+    "current_mood": "openhome/personalities/current_mood.json",
+    "mood_evolving_instructions": "openhome/personalities/mood_evolving_instruction.txt",
+    "loading_sounds": "openhome/sounds/johnny_knoxville",
+    "greetings": "Hi I am Vickey, a professional historian focusing on ancient and archaeological sites,. What do you want?"
+  },
+  "13": {
+    "id": "13",
+    "name": "marie_kerry",
+    "voice_id": "21m00Tcm4TlvDq8ikWAM",
+    "personality": "openhome/personalities/marie_kerry.txt",
+    "mood": "openhome/personalities/mood.json",
+    "current_mood": "openhome/personalities/current_mood.json",
+    "mood_evolving_instructions": "openhome/personalities/mood_evolving_instruction.txt",
+    "loading_sounds": "openhome/sounds/johnny_knoxville",
+    "greetings": "Welcome, I am Marie Kerry, the well-known Video Gaming Professional, known for expertise in playing video games and all the technicalities of every game. Wha'st your favourite game?"
   }
 }
