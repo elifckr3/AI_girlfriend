@@ -18,6 +18,9 @@ from openhome.history_files.history_manager import store_history
 # recent two chats storage maanger
 from openhome.history_files.user_memory_manager import update_recent_history
 
+# history summarizer
+from openhome.history_files.history_summarizer import summarize_history, exit_handler
+
 # import conversation manager to manage and converge messages
 from openhome.conversation_manager import manage_conversation
 
@@ -36,6 +39,9 @@ import json
 from time import time
 import threading
 
+# import ateexit to run some functions at exiting the script.
+import atexit
+from openhome.history_files.history_summarizer import get_summarized_conversation
 
 # Open the yaml file
 with open('openhome/config.yaml', 'r', encoding='utf-8') as file:
@@ -122,10 +128,10 @@ def main(personality, conversation, mood_prompt_template, emotion_detection_prom
             mood_evolving_thread = threading.Thread(target=mood_evolver, args=(mood_prompt_template,file_data['openai_api_key'], emotion_detection_prompt))
             mood_evolving_thread.daemon = True
             mood_evolving_thread.start()
-            # combine the initial and mood customized prompts
-            # openhome.app_globals.MOOD_EVOLVER_ENABLED = False
+        # combine the initial and mood customized prompts
         prompt = get_customized_prompt(initial_prompt=personality['personality'])
-        # print(prompt)
+        # get the conversation with summarized history inserted into current conversation.
+        summarized_conversation = get_summarized_conversation()
         # Start the loading function that runs till the chatgpt function's response  in a separate thread
         loading_thread = threading.Thread(target=play_loading_sound, args=(personality['loading_sounds'],))
         loading_thread.daemon = True
@@ -134,7 +140,7 @@ def main(personality, conversation, mood_prompt_template, emotion_detection_prom
         start_time = time()
         print('Generating chatgpt response.')
         # call chatgpt function
-        response = chatgpt(file_data['openai_api_key'], conversation, prompt)
+        response = chatgpt(file_data['openai_api_key'], summarized_conversation, prompt)
         # Wait for the continuous thread to finish
         loading_thread.join()
         # set again the global variable to true to play sond again till the geenration of customized prompt.
@@ -155,6 +161,10 @@ def main(personality, conversation, mood_prompt_template, emotion_detection_prom
         end_time = time()
         total_time = end_time - start_time
         print('History storage completed in', total_time)
+        # Start the history summarizer thred that will summarize the chat history using chatgpt.
+        historysummarizer_thread = threading.Thread(target=summarize_history, args=(file_data['openai_api_key'],))
+        historysummarizer_thread.daemon = True
+        historysummarizer_thread.start()
         # call the conversation manager to mantin conversation
         conversation = manage_conversation(response,conversation, role='assistant')
 
@@ -177,6 +187,9 @@ def main(personality, conversation, mood_prompt_template, emotion_detection_prom
     total_time =  end_time - start_time
     print('Text to Speech conversion completed in', total_time)
     return conversation, personality
+
+# Register the exit handler
+atexit.register(exit_handler, file_data['openai_api_key'])
 
 
 # get current mood from json

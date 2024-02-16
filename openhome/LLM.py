@@ -2,7 +2,6 @@
 import openai
 import asyncio
 from openhome.voice_input_output.loading_sounds import play_loading_sound
-
 # import global variable for playing loading sound
 import openhome.app_globals
 

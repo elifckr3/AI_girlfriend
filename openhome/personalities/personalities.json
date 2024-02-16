@@ -139,7 +139,7 @@
     "mood": "openhome/personalities/mood.json",
     "current_mood": "openhome/personalities/current_mood.json",
     "mood_evolving_instructions": "openhome/personalities/mood_evolving_instruction.txt",
-    "loading_sounds": "openhome/sounds/johnny_knoxville",
+    "loading_sounds": "openhome/sounds/marie_kerry",
     "greetings": "Welcome, I am Marie Kerry, the well-known Video Gaming Professional, known for expertise in playing video games and all the technicalities of every game. Wha'st your favourite game?"
   }
 }
