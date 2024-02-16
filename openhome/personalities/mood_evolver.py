@@ -59,7 +59,7 @@ def string_to_dict(string_input):
         percentage_dict = Dict containing emotions and scores.
     """
     # Define a regex pattern to find the keys and scores
-    pattern = r"(- )(\w+) (\d+)%"
+    pattern = r"(-)(\w+) (\d+)"
     matches = re.findall(pattern, string_input)
 
     # Create a dictionary from the matches
@@ -84,8 +84,11 @@ def mood_evolver(mood_prompt_template, api_key, emotion_detection_prompt):
     conversation = openhome.app_globals.conversation
     mood_json = openhome.app_globals.mood_json
     # call chatgpt function for emotion detection
-    emotion = chatgpt(api_key, conversation, emotion_detection_prompt)
-
+    message = []
+    message.append(conversation[-1])
+    print(message)
+    emotion = chatgpt(api_key, message, emotion_detection_prompt)
+    print(emotion)
     # Convert emotion and scores in dict
     emotions_with_scores = string_to_dict(emotion)
     print('current moode scores', emotions_with_scores)

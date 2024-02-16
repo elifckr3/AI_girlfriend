@@ -194,6 +194,9 @@ atexit.register(exit_handler, file_data['openai_api_key'])
 
 # get current mood from json
 mood_json = load_json(path='openhome/personalities/mood.json')
+# reset emotions score to zero for more accurate results for each conversation.
+for emotion in mood_json:
+    mood_json[emotion] = 0
 # assign mood json to a global variable as we are implementing threading and we cannot get back values  from threaded function so easily.
 openhome.app_globals.mood_json = mood_json
 # read instructions file.
