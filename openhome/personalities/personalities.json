@@ -29,7 +29,7 @@
     "mood": "openhome/personalities/mood.json",
     "current_mood": "openhome/personalities/annabele_current_mood.json",
     "mood_evolving_instructions": "openhome/personalities/annabele_instructions.txt",
-    "loading_sounds": "openhome/ssounds/annabele",
+    "loading_sounds": "openhome/sounds/annabele",
     "greetings": "Oh. Hello. How may I help you?"
   },
   "4": {
@@ -51,7 +51,7 @@
     "mood": "openhome/personalities/mood.json",
     "current_mood": "openhome/personalities/conspiracy_radio_host_current_mood.json",
     "mood_evolving_instructions": "openhome/personalities/conspiracy_radio_host_instructions.txt",
-    "loading_sounds": "openhome/ssounds/conspiracy_radio_host",
+    "loading_sounds": "openhome/sounds/conspiracy_radio_host",
     "greetings": "Hey there, truth-seekers and reality-questioners! Strap in and adjust your tinfoil hats, because you've just tuned into the 'Whispers from the Weird' hour, the only show where the truth isn't out there—it's right here, hiding in plain sight under your garden gnome! Today, we've got a guest who's about to blow the lid off a conspiracy so wild. Go ahead hacker house, you're on the air."
   },
   "6": {
