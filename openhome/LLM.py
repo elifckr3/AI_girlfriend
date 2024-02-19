@@ -2,7 +2,6 @@
 import openai
 import asyncio
 from openhome.voice_input_output.loading_sounds import play_loading_sound
-
 # import global variable for playing loading sound
 import openhome.app_globals
 
@@ -41,7 +40,7 @@ def chatgpt(api_key, conversation, chatbot, temperature=0.9, frequency_penalty=0
         chat_response = completion['choices'][0]['message']['content']
     except Exception as e:
         print('Error %s' %e)
-    openhome.app_globals.play_loading_sound_global = False
+    openhome.app_globals.PLAY_LOADING_SOUND_GLOBAL = False
     return chat_response
 
 

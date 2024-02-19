@@ -22,5 +22,6 @@ def main(user_message, personality, resume_event):
     # Return a feedback message indicating completion
     return {
         "feedback": "10-second pause complete. Resuming operations.",
+        "result": "",
         "pauseMain": False  # This action is self-contained, so it doesn't request the main loop to pause further.
     }

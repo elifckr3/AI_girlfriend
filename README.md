@@ -41,17 +41,59 @@ Work in Progress Technical Architecture: https://docs.google.com/document/d/1PIn
 
 ## Install and configure
 
-To get the project running locally install pdm using python3
+To get the project running locally install pdm using python3.11.
+
+Check your python version if it is below 3.11 run these two python related commands else you can directly run the curl command.
+
+To add python repo to your system run the folowing deadsnakes command.
+
+```bash
+sudo add-apt-repository ppa:deadsnakes/ppa
+```
+
+After adding python repo to your system install python 3.11.
+
+
+```bash
+sudo apt install python3.11
+```
+
+You can install `curl` using the following command if it is not already installed.
+
+```bash
+sudo apt  install curl
+```
 
 ```bash
 curl -sSL https://pdm-project.org/install-pdm.py | python3 -
 ```
 
+After install run the prompted command
+
+```bash
+export PATH=/Users/your-username/.local/bin:$PATH
+```
+
 Next install the required dependencies.
+
 
 ### Install dependencies
 
 To install the required dependencies, run the following command:
+
+```bash
+pdm install
+```
+After running `pdm install` command if you encounter the following error.
+
+![Error log](/assets/pyAudio_error.png?raw=true "PyAudio Error")
+
+Run the following command to fix PyAudio error.
+
+```bash
+sudo apt install python3.11-dev build-essential gcc
+```
+And again run.
 
 ```bash
 pdm install
@@ -62,8 +104,8 @@ You can also use homebrew to install these modules. brew install ffmpeg, portaud
 
 To run the main pipeline, run the following command:
 
-```python
-pdm run main.py -p 1
+```bash
+pdm run main -p 1
 ```
 
 - `<Enter personality>`: Pass your desired personality

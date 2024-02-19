@@ -1,7 +1,7 @@
 [
   {
     "Command": "End session",
-    "Triggers": ["end", "turn off", "finish", "stop", "exit"],
+    "Triggers": ["end the chat", "turn off", "finish the chat", "exit the room"],
     "Library": "openhome/capabilities/end_session.py",
     "Notes": "Ends the current session and turns off the smart speaker.",
     "PauseMain": true
@@ -59,7 +59,7 @@
     "Command": "Switch Personality",
     "Triggers": ["switch personality", "switch assistant"],
     "Library": "openhome/capabilities/switch_personality.py",
-    "Notes": "Swithces the personality to desired onoe available",
+    "Notes": "Swithces the personality to desired one available",
     "PauseMain": false
   }
 ]

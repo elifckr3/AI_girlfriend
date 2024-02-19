@@ -25,7 +25,7 @@ def get_random_track(spotifyObject):
     return random_track
 
 # Used to Play song on spotify
-def play_song(search_song=''):
+def main(message, personality, resume_event, search_song=''):
     if platform.system() == 'Linux':
         try:
             # Command to open Spotify installed via Snap on Ubuntu
@@ -76,7 +76,10 @@ def play_song(search_song=''):
         spotifyObject.start_playback(device_id=device_id, context_uri=None, uris=["spotify:track:"+track_id], offset=None)
     except spotipy.exceptions.SpotifyException as e:
         print(e)
-    return
+    return {
+        "feedback": chat_response,
+        "result": "",
+    }
 
 # Used to Install Spotify app
 def install_spotify():

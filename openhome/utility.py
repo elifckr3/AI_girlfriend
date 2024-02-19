@@ -36,3 +36,15 @@ def write_json(path, data):
     with open(path, 'wb') as file:
         file.write(bytes_data)
     return 0
+
+def load_txt_file(path=''):
+    """_summary_
+
+    Args:
+        path (str, optional): path of the text file to load in a variable. Defaults to ''.
+    """
+    # load the text file
+    with open(path, 'r') as file:
+        # Read the entire contents of the file into a variable
+        data = file.read()
+    return data

@@ -35,4 +35,3 @@ def store_history(user_message, assitant_message):
             json.dump(history, file, indent=4)
     except Exception as e:
         print(e)
-        print(history)
