@@ -65,9 +65,11 @@ def main(personality, conversation, mood_prompt_template, emotion_detection_prom
         personality (str): Personality entered by user while running the main script.
         conversation (list): List of messages from user and asistant as a history.
         mood_prompt_template (str): Instructions string from mood evolving instruction text file.
+        emotion_detection_prompt (str): Prompt to be provided to chatgpt for emotion detection foma string message.
 
     Returns:
         conversation (list): Updated list of messages from user and asistant as a history.
+        personality (dict): Returns the current user selected personality dictionary object.
     """
     # if conversation has something record user data else say greetings.
     if conversation:
