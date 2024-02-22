@@ -6,8 +6,9 @@ from openhome.voice_input_output.loading_sounds import play_loading_sound
 import openhome.app_globals
 
 
+
 # define the function to comminiucate with chatgpt.
-def chatgpt(api_key, conversation, chatbot, temperature=0.9, frequency_penalty=0.2, presence_penalty=0):
+def chatgpt(api_key, conversation: list[str], chatbot, temperature=0.9, frequency_penalty=0.2, presence_penalty=0):
     """    
     This function calls chat gpt to get response for user query.
     This function take openai api key, conversation history, chatbot prompt and three other variables, temparatue,

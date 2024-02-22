@@ -11,7 +11,7 @@ def manage_conversation(message, conversation, role):
     Args:
         message (string): Message is the string passed with the corresponding role.
         conversation (list): List of dictionaries of messages.
-        role (string): Role can be user or assistant.
+        role (string): Role can be  .
 
     Returns:
         conversation (list): List of dictionaries of messages.
