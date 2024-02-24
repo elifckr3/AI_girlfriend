@@ -246,7 +246,13 @@ def nice_timeit(
     best = min(all_runs) / number
     worst = max(all_runs) / number
     timeit_result = TimeitResult(
-        number, repeat, best, worst, all_runs, total_compile_time, precision
+        number,
+        repeat,
+        best,
+        worst,
+        all_runs,
+        total_compile_time,
+        precision,
     )
 
     # Check best timing is greater than zero to avoid a
@@ -313,7 +319,7 @@ def timeit(self, func):
         execution_time = end_time - start_time
         filename = func.__module__.split(".")[-1]
         self.warning(
-            f"Function '{func.__name__}' in '{filename}.py' executed in {format_time(execution_time)}"
+            f"Function '{func.__name__}' in '{filename}.py' executed in {format_time(execution_time)}",
         )
         return result
 
@@ -384,7 +390,7 @@ def _is_enabled():
 
     if "PROFILE" not in os.environ:
         print(
-            "Not profiling! need to set environ var 'PROFILE=True' to actually profile!"
+            "Not profiling! need to set environ var 'PROFILE=True' to actually profile!",
         )
         return False
 

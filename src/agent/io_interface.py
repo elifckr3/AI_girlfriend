@@ -1,4 +1,3 @@
-import io
 import os
 import logging
 import tempfile
@@ -106,7 +105,7 @@ def text_to_speech(text: str, voice_id: str) -> int:
 
     if audio_bytes is None or not isinstance(audio_bytes, bytes):
         logging.error(
-            f"I/O Error TTS: status={status}, content type={type(audio_bytes)}"
+            f"I/O Error TTS: status={status}, content type={type(audio_bytes)}",
         )
 
     elif status in (200, 1) and isinstance(audio_bytes, bytes):

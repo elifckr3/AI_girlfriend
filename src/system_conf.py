@@ -2,7 +2,6 @@ import typer
 import os
 import logging
 from enum import Enum
-from typing import TypeVar
 from src.utils.prompt import Prompt, Question, QTypes
 from src.utils.db import RedisConnect
 
@@ -160,7 +159,7 @@ class SystemConfigPrompt(Prompt):
                     enum_struct=TTS_CLIENTS,
                     default=TTS_CLIENTS.ELEVENLABS,
                 ),
-            ]
+            ],
         )
 
         for client in clients_chosen:
@@ -230,7 +229,7 @@ class SystemConfigPrompt(Prompt):
                             message="Dynamic energy adjustment damping",
                             default=0.15,
                         ),
-                    ]
+                    ],
                 )
                 self._set_env(local_recording_params)
 
@@ -242,8 +241,8 @@ class SystemConfigPrompt(Prompt):
                             message="Model",
                             enum_struct=OpenAISTTModels,
                             default=OpenAISTTModels.WHISPER_1,
-                        )
-                    ]
+                        ),
+                    ],
                 )
                 self._set_env(gpt_model)
 
@@ -292,7 +291,7 @@ class SystemConfigPrompt(Prompt):
                             message="Presence penalty",
                             default=0,
                         ),
-                    ]
+                    ],
                 )
                 self._set_env(openai_ttt_params)
             case _:
@@ -323,7 +322,7 @@ class SystemConfigPrompt(Prompt):
                             message="Voice similarity boost",
                             default=0.5,
                         ),
-                    ]
+                    ],
                 )
                 self._set_env(el_tts_params)
 

@@ -1,9 +1,7 @@
 import typing
 import enum
-import enum as Enum
 from abc import ABC, abstractmethod
-from functools import wraps
-from typing import Any, Type, TypeVar, cast
+from typing import Any, TypeVar, cast
 
 import numpy as np
 import questionary
@@ -35,7 +33,7 @@ CUSTOM_STYLE = questionary.Style(
             "disabled",
             "fg:#858585 italic",
         ),  # disabled choices for select and checkbox prompts
-    ]
+    ],
 )
 
 
@@ -113,7 +111,7 @@ class Prompt(BaseModel, ABC):
         self,
         qs: list[Question],
     ) -> dict[str, Any]:
-        assert len(qs) == len(set([q.name for q in qs])), "duplicate question names"
+        assert len(qs) == len({q.name for q in qs}), "duplicate question names"
 
         input: list[dict[str, Any]] = []
 
@@ -164,7 +162,7 @@ class Prompt(BaseModel, ABC):
 
                 q_dict["filter"] = (
                     lambda val, vte=value_to_enum: [vte.get(v) for v in val]
-                    if isinstance(val, (list, tuple))
+                    if isinstance(val, list | tuple)
                     else vte.get(val)
                 )
 
@@ -193,16 +191,17 @@ class Prompt(BaseModel, ABC):
                     q_dict["choices"] = [str(e) for e in q.choices]
 
                     q_dict["validate"] = NumberValidator(
-                        empty_allowed=empty_allowed, choices=q_dict["choices"]
+                        empty_allowed=empty_allowed,
+                        choices=q_dict["choices"],
                     )
 
-                    q_dict["filter"] = (
-                        lambda res, q=q, q_dict=q_dict: clean_numeric_result(
-                            result=res,
-                            dtype="int" if q.qtype is QTypes.INT else "float",
-                            choices=q_dict["choices"],
-                            default=q.default,
-                        )
+                    q_dict[
+                        "filter"
+                    ] = lambda res, q=q, q_dict=q_dict: clean_numeric_result(
+                        result=res,
+                        dtype="int" if q.qtype is QTypes.INT else "float",
+                        choices=q_dict["choices"],
+                        default=q.default,
                     )
 
                 else:
@@ -220,14 +219,16 @@ class Prompt(BaseModel, ABC):
 
         if self.test_input is not None:
             return questionary.prompt(
-                input, input=self.test_input, output=self.test_output
+                input,
+                input=self.test_input,
+                output=self.test_output,
             )
 
         return questionary.prompt(input)
 
     def prompt_fields(
         self,
-        model: Type[ModelT] | ModelT,
+        model: type[ModelT] | ModelT,
         skip_attrs: list[str] = [],
         attr_paths: dict[str, typing.Callable] = {},
         set_attrs: dict[str, Any] = {},
@@ -327,7 +328,10 @@ def contains_non_numbers(lst: list[str]):
 
 
 def clean_max_min(
-    choices: list[str], default: int | float, lt: int | float, gt: int | float
+    choices: list[str],
+    default: int | float,
+    lt: int | float,
+    gt: int | float,
 ) -> list[str]:
     if isinstance(default, int):
         if lt is not None:
@@ -360,7 +364,9 @@ def clean_max_min(
 
 
 def generate_number_choices(
-    default: int | float, lower: int | float, upper: int | float
+    default: int | float,
+    lower: int | float,
+    upper: int | float,
 ) -> list[str]:
     choices: list[Any] = []
 
@@ -398,7 +404,8 @@ def generate_number_choices(
 
 
 def create_number_choices(
-    field: FieldInfo, bounds: dict[str, int | float]
+    field: FieldInfo,
+    bounds: dict[str, int | float],
 ) -> list[str]:
     default = field.default
     bounds_avail = list(bounds.keys())
@@ -418,7 +425,7 @@ def create_number_choices(
                 default=default,
                 lower=lower,
                 upper=upper,
-            )
+            ),
         )
 
         if "lt" in bounds_avail and "gt" in bounds_avail:
@@ -444,7 +451,7 @@ def clean_numeric_result(
     output: int | float | str = result
 
     if result == "Default: " + str(default):
-        assert isinstance(default, int) or isinstance(default, float)
+        assert isinstance(default, float | int)
         output = default
 
     if len(choices) >= 3:
@@ -517,7 +524,8 @@ class NumberValidator(Validator, BaseModel):
                         return
                     else:
                         raise ValidationError(
-                            message=range_text_error, cursor_position=0
+                            message=range_text_error,
+                            cursor_position=0,
                         )
                 else:
                     raise ValidationError(message=range_text_error, cursor_position=0)
@@ -536,7 +544,8 @@ class NumberValidator(Validator, BaseModel):
                             return
                         else:
                             raise ValidationError(
-                                message=range_text_error, cursor_position=0
+                                message=range_text_error,
+                                cursor_position=0,
                             )
                 except ValueError:
                     raise ValidationError(

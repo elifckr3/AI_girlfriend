@@ -1,4 +1,3 @@
-import yaml
 import pytest
 import sys
 import os
@@ -7,7 +6,6 @@ import logging
 
 # import pyttsx
 from gtts import gTTS
-from pydantic import BaseModel
 from src.utils.db import RedisConnect
 from src.agent.base import BotAgent, AgentNameExistsError, BotPersonalityDna
 from src.agent.capability import Capability
@@ -20,7 +18,7 @@ db_connection = RedisConnect()
 
 DEFAULT_DATA_PATH = "dev_tools/default_data/default_personalities.yml"
 
-# sys.path.append("src")
+sys.path.append("src")
 
 
 def test_agent():
@@ -68,7 +66,7 @@ def test_agent():
 
     logging.debug("TESTING manage context - with mood evolver + multi words")
     context = agent.manage_context(
-        ["random fluffy word", "maybe i said something else too"]
+        ["random fluffy word", "maybe i said something else too"],
     )
     logging.debug(f"mood evolver final prompt: {context}")
     assert isinstance(context, str), "expected context to be a string"
@@ -86,7 +84,7 @@ def test_agent():
 
         os.environ["TTT_CLIENT"] = client.value
         context = agent.manage_context(
-            ["random fluffy word", "maybe i said something else too"]
+            ["random fluffy word", "maybe i said something else too"],
         )
         assert isinstance(context, str), "expected context to be a string"
 

@@ -1,10 +1,8 @@
-import io
 import os
 import tempfile
 from enum import Enum
 import logging
 import openai
-from pydub import AudioSegment
 from src.utils import timeit
 
 from src.system_conf import (
@@ -99,7 +97,7 @@ class OpenAiClient:
 
             elif isinstance(transcription, str):
                 logging.debug(
-                    f"OpenAI STT (transcription) empty string: {transcription}"
+                    f"OpenAI STT (transcription) empty string: {transcription}",
                 )
 
             else:

@@ -1,10 +1,4 @@
 import os
-import tempfile
-import logging
-from io import BytesIO
-from pydub import AudioSegment
-from pydub import AudioSegment
-from pydub.playback import play
 from src.clients.base_api_request import push_request
 from src.utils import timeit
 from src.system_conf import ELEVEN_LABS_KEY

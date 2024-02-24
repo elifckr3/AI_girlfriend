@@ -1,13 +1,9 @@
-from enum import Enum
 import redis
 import logging
 import json
-from datetime import timedelta, datetime
-import datetime as dt
 
-from typing import Optional, Any
+from typing import Any
 from pydantic import BaseModel, ConfigDict
-from string import Template
 
 
 def is_bytes_not_parquet(data):

@@ -47,7 +47,7 @@ distribution = false
 # pre_install = "dev_scripts/pre_install.sh"
 # post_install = "dev_scripts/post_install.sh"
 main.call = "src.main:app"
-# main.env = { PROFILE = "True" } # NOTE uncomment to profile 
+# main.env = { PROFILE = "True" } # NOTE uncomment to profile
 reset_db.call = "src.dev_tools.db_management:create_new_db"
 upload_env.call = "src.dev_tools.upload_env:upload_env"
 pre_commit.cmd = "pdm run pre-commit install"

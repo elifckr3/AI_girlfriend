@@ -53,7 +53,7 @@ class PersonalityConfigPrompt(Prompt):
                     choices=agents_available,
                     when=lambda x: x["start"] == PersonalityChoice.COMMUNITY,
                 ),
-            ]
+            ],
         )
 
         if personality_type["start"] == PersonalityChoice.NEW:
@@ -93,7 +93,7 @@ class PersonalityConfigPrompt(Prompt):
                         name="name",
                         qtype=QTypes.TEXT,
                         message="Character's name ?",
-                    )
+                    ),
                 ],
             )["name"]
             logging.debug(f"checking if {name} is available")
@@ -116,7 +116,7 @@ class PersonalityConfigPrompt(Prompt):
                         name="voice",
                         qtype=QTypes.TEXT,
                         message="Character's ElevenLabs voice id ?",
-                    )
+                    ),
                 ],
             )["voice"]
             if voice is None:
@@ -152,7 +152,7 @@ class PersonalityConfigPrompt(Prompt):
                     multiline=True,
                 )
                 for field_name in BotPersonalityDna.model_fields.keys()
-            ]
+            ],
         )
         return BotPersonalityDna(**personality_dna)
 
@@ -168,8 +168,8 @@ class PersonalityConfigPrompt(Prompt):
                     qtype=QTypes.CHECK,
                     enum_struct=PersonalityMoodAxioms,
                     message="Choose mood categories for agent to engage with: ",
-                )
-            ]
+                ),
+            ],
         )
 
         if moods_axioms is not None:
@@ -182,7 +182,7 @@ class PersonalityConfigPrompt(Prompt):
                         multiline=True,
                     )
                     for m in moods_axioms["mood_axioms"]
-                ]
+                ],
             )
 
         mood_dna = [
@@ -203,8 +203,8 @@ class PersonalityConfigPrompt(Prompt):
                     qtype=QTypes.CHECK,
                     enum_struct=DummyCapabilityChoice,
                     message="Choose bot capabilities: ",
-                )
-            ]
+                ),
+            ],
         )["capabilities"]
         return capabilities
 

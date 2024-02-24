@@ -2,8 +2,8 @@
 
 install_mac() {
     echo "Installing on macOS..."
-    brew install portaudio 
-    brew install ffmpeg 
+    brew install portaudio
+    brew install ffmpeg
     brew install redis
     brew install jinja2
     # brew install libportaudio2 # XXX-JESE no such package

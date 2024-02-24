@@ -1,12 +1,9 @@
 import datetime
-from enum import Enum
 import pytz
 from pydantic import (
     BaseModel,
-    model_serializer,
     Field,
     ConfigDict,
-    SkipValidation,
     field_serializer,
 )
 from src.agent.message import Message
@@ -42,11 +39,11 @@ class UserMemory(BaseModel):
     year_of_birth: int = 0
 
     likes: UserContextVolume = Field(
-        default_factory=lambda: default_user_memory_volume()
+        default_factory=lambda: default_user_memory_volume(),
     )
 
     dislikes: UserContextVolume = Field(
-        default_factory=lambda: default_user_memory_volume()
+        default_factory=lambda: default_user_memory_volume(),
     )
 
     @classmethod

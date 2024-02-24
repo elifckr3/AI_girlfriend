@@ -1,13 +1,9 @@
-import io
 import os
-import openai
 import sounddevice as sd
-import soundfile as sf
 import logging
 
 import speech_recognition as sr
 from src.clients.openai import OpenAiClient
-from time import time
 from src.utils import timeit
 
 from src.system_conf import (
@@ -73,7 +69,7 @@ def _speech_recon_lib():
     r.energy_threshold = get_conf(LOCAL_RECORDING_ENERGY_THRESHOLD)
     r.dynamic_energy_threshold = get_conf(LOCAL_RECORDING_DYNAMIC_ENERGY_THRESHOLD)
     r.dynamic_energy_adjustment_damping = get_conf(
-        LOCAL_RECORDING_DYNAMIC_ENERGY_ADJUSTMENT_DAMPING
+        LOCAL_RECORDING_DYNAMIC_ENERGY_ADJUSTMENT_DAMPING,
     )
 
     with sr.Microphone() as source:
@@ -82,7 +78,8 @@ def _speech_recon_lib():
         # should be on a seperate thread constantly sampling on periods of background noise # TODO - define this
         # once sampled then dynamically adjust sr.Recognizer()'s self.energy_threshold < # NOTE
         r.adjust_for_ambient_noise(
-            source, duration=get_conf(LOCAL_RECORDING_ENERGY_ADJUSTMENT_DURATION)
+            source,
+            duration=get_conf(LOCAL_RECORDING_ENERGY_ADJUSTMENT_DURATION),
         )
         # self.energy_threshold = self.energy_threshold * damping + target_energy * (1 - damping)
         # target_energy = energy * self.dynamic_energy_ratio

@@ -1,6 +1,7 @@
 import logging
-from typing import Callable, Union
-from pydantic import BaseModel, model_serializer
+from typing import Union
+from collections.abc import Callable
+from pydantic import BaseModel
 
 
 class Capability(BaseModel):

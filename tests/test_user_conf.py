@@ -1,5 +1,4 @@
 import sys
-import pytest
 import logging
 from prompt_toolkit.input import create_pipe_input
 

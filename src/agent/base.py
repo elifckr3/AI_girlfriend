@@ -1,5 +1,5 @@
 import os
-from typing import Callable
+from collections.abc import Callable
 from pydantic import BaseModel, ConfigDict
 import logging
 from enum import Enum
@@ -10,7 +10,6 @@ from src.agent.message import RoleTypes, Message
 from src.utils.db import RedisConnect
 from src.utils.markdown_loader import prompt_loader
 from src.utils.ip import get_ip_address
-from src.utils import timeit
 
 db_connection = RedisConnect()
 
@@ -241,7 +240,7 @@ class BotAgent(BaseModel):
         logging.debug(f"saving message '{message}' with role '{role.value}'")
 
         self.memory.full_message_history.append(
-            Message(content=message, role=role.value)
+            Message(content=message, role=role.value),
         )
         self.save()
 
@@ -258,7 +257,9 @@ class BotAgent(BaseModel):
         text_to_speech(text=response, voice_id=self.metadata.voice_api_id)
 
     def manage_context(
-        self, msgs: list[str], cold_start: bool = False
+        self,
+        msgs: list[str],
+        cold_start: bool = False,
     ) -> str | Callable | None:
         """
         Manage the context of the conversation
@@ -275,7 +276,8 @@ class BotAgent(BaseModel):
 
         if capability is not None:
             assert isinstance(
-                capability, Capability
+                capability,
+                Capability,
             ), f"Invalid capability type: {type(capability)}"
 
             return capability

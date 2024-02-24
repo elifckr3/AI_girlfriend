@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from src.agent.base import BotAgent, BotPersonalityDna, BotMoodAxiom
 from src.utils.db import RedisConnect
 from src.utils.markdown_loader import prompt_loader
+
 # from src.system_conf import ENV_DATA
 
 # CAN_DELETE = False
@@ -76,7 +77,7 @@ def _load_personality_dna(personality_dna_path: str) -> dict[str, str]:
         if file_name.endswith(".md"):
             # Assuming no variables are needed for the Markdown files
             content = prompt_loader(
-                file_path=os.path.join(personality_dna_path, file_name)
+                file_path=os.path.join(personality_dna_path, file_name),
             )
             # Use the file name without the extension as the key
             personality_dna[os.path.splitext(file_name)[0]] = content

@@ -5,8 +5,6 @@ from datetime import datetime, timedelta
 import typer
 import threading
 import logging
-import sys
-from typing import Callable
 from src.personality_conf import PersonalityConfigPrompt
 from src.system_conf import SystemConfigPrompt, ENV_DATA
 from src.agent.base import BotAgent, BotMemoryUpdateType
@@ -14,7 +12,7 @@ from src.agent.message import RoleTypes
 from src.agent.capability import Capability
 from src.utils import timeit, pretty_console
 from src.utils.db import RedisConnect
-from typing_extensions import Annotated
+from typing import Annotated
 from queue import Queue
 
 app = typer.Typer()
@@ -154,16 +152,20 @@ class ThreadManager:
 @app.command()
 def main(
     debug: Annotated[  # TODO i hate how these annotations force you to express the CLI without --flags
-        bool, typer.Argument(help="Debug mode with DEBUG level logging")
+        bool,
+        typer.Argument(help="Debug mode with DEBUG level logging"),
     ] = False,
     default_bot: Annotated[
-        bool, typer.Argument(help="Use default bot (Allan Watts)")
+        bool,
+        typer.Argument(help="Use default bot (Allan Watts)"),
     ] = False,
     update_conf: Annotated[
-        bool, typer.Argument(help="Toggle prompts to update system configuration")
+        bool,
+        typer.Argument(help="Toggle prompts to update system configuration"),
     ] = False,
     speach_off: Annotated[
-        bool, typer.Argument(help="Toggle speach off for debugging")
+        bool,
+        typer.Argument(help="Toggle speach off for debugging"),
     ] = False,
     # local_db: bool = False,
     # mock_api: bool = False,
