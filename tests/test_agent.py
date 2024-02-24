@@ -20,7 +20,7 @@ db_connection = RedisConnect()
 
 DEFAULT_DATA_PATH = "dev_tools/default_data/default_personalities.yml"
 
-# sys.path.append("src")
+sys.path.append("src")
 
 
 def test_agent():
