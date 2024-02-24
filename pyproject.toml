@@ -27,6 +27,10 @@ dependencies = [
     "line-profiler>=4.1.2",
     "assemblyai>=0.22.0",
     "colorlog>=6.8.2",
+    "jinja2>=3.1.3",
+    "redis>=5.0.1",
+    "gTTS>=2.5.1",
+    "pyttsx>=1.1",
 ]
 
 requires-python = "==3.11.*"
@@ -38,15 +42,13 @@ license = { text = "TBD" }
 distribution = false
 
 [tool.pdm.scripts]
-pre_install = "dev_scripts/pre_install.sh"
-post_install = "dev_scripts/post_install.sh"
-main.call = "openhome.main:main"
+# pre_install = "dev_scripts/pre_install.sh"
+# post_install = "dev_scripts/post_install.sh"
+main.call = "src.main:main"
 main.env = { ENV = "DEV" }
 
 [tool.pdm.dev-dependencies]
-dev = [
-    "pyaudio>=0.2.14",
-]
+dev = ["pyaudio>=0.2.14"]
 
 [tool.ruff]
 # Enable the pycodestyle (`E`) and Pyflakes (`F`) rules by default.

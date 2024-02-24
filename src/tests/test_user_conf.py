@@ -7,7 +7,7 @@ sys.path.append("src")
 
 
 def test_user_conf():
-    from personality_conf import UserStartConfig
+    from personality_conf import PersonalityConfigPrompt
     from dev_tools.db_management import create_new_db
 
     logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
@@ -24,7 +24,7 @@ def test_user_conf():
             input.send_text(p)
             input.send_text("\n")
 
-        agent = UserStartConfig(
+        agent = PersonalityConfigPrompt(
             test_input=input,
         ).run()
 

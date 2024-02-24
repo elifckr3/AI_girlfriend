@@ -4,13 +4,15 @@ install_mac() {
     echo "Installing on macOS..."
     brew install portaudio 
     brew install ffmpeg 
+    brew install redis
+    brew install jinja2
     # brew install libportaudio2 # XXX-JESE no such package
 }
 
 install_ubuntu() {
     echo "Installing on Ubuntu..."
     sudo apt-get update
-    sudo apt-get install -y portaudio19-dev ffmpeg libportaudio2
+    sudo apt-get install -y portaudio19-dev ffmpeg libportaudio2 jinja2 redis
 }
 
 install_windows() {

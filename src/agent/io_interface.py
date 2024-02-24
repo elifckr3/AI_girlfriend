@@ -3,10 +3,11 @@ import os
 import logging
 import tempfile
 from enum import Enum
-from clients.openai import chatgpt_ttt
+from clients.openai import OpenAiClient
 from clients.eleven_labs import eleven_labs_tts
 from clients.assembly import assembly_transcribe
-from clients.local_microphone import local_transcribe
+from clients.local_microphone import local_record_online_transcribe
+from system_conf import get_conf, STT_CLIENT, TTT_CLIENT, TTS_CLIENT
 from pydub import AudioSegment
 from pydub.playback import play
 
@@ -26,13 +27,22 @@ class TTS_CLIENTS(Enum):
     ELEVENLABS = "elevenlabs"
 
 
+def get_client_from_env():
+    def wrapper(client_type: str):
+        return os.environ.get(client_type, None)
+
+    return wrapper
+
+
 def speech_to_text():
-    client = os.environ.get("STT_CLIENT", STT_CLIENTS.INTERNAL.value)
+    client = get_conf(STT_CLIENT)
+
+    logging.debug(f"STT_CLIENT: {client}")
 
     text = None
     match client:
         case STT_CLIENTS.INTERNAL.value:
-            text = local_transcribe()
+            text = local_record_online_transcribe()
 
         case STT_CLIENTS.ASSEMBLY.value:
             text = assembly_transcribe()
@@ -41,16 +51,16 @@ def speech_to_text():
             logging.error(f"Invalid client type: {client}")
 
     if text == "" or text is None:
-        logging.error(f"Error STT: {text}")
+        logging.error(f"I/O Error STT: {text}")
 
     else:
-        logging.debug(f"transcription: {text}")
+        logging.debug(f"I/O STT transcription: {text}")
 
     return text
 
 
 def text_to_text(messages_input: str) -> str | None:
-    client = os.environ.get("TTT_CLIENT", TTT_CLIENTS.OPENAI.value)
+    client = get_conf(TTT_CLIENT)
 
     logging.debug(f"TTT_CLIENT: {client}")
 
@@ -61,7 +71,7 @@ def text_to_text(messages_input: str) -> str | None:
             pass
 
         case TTT_CLIENTS.OPENAI.value:
-            text = chatgpt_ttt(messages_input=messages_input)
+            text = OpenAiClient().ttt(messages_input=messages_input)
 
         case _:
             raise ValueError(f"Invalid client type: {client}")
@@ -70,7 +80,9 @@ def text_to_text(messages_input: str) -> str | None:
 
 
 def text_to_speech(text: str, voice_id: str) -> int:
-    client = os.environ.get("TTS_CLIENT", TTS_CLIENTS.ELEVENLABS.value)
+    client = get_conf(TTS_CLIENT)
+
+    logging.debug(f"TTS_CLIENT: {client}")
 
     status = 0
     audio_bytes = None
@@ -89,17 +101,21 @@ def text_to_speech(text: str, voice_id: str) -> int:
             return
 
     if audio_bytes is None or not isinstance(audio_bytes, bytes):
-        logging.error(f"Error TTS: status={status}, content type={type(audio_bytes)}")
+        logging.error(
+            f"I/O Error TTS: status={status}, content type={type(audio_bytes)}"
+        )
 
     elif status in (200, 1) and isinstance(audio_bytes, bytes):
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".mp3") as temp_file:
+        with tempfile.NamedTemporaryFile(delete=True, suffix=".mp3") as temp_file:
             temp_file.write(audio_bytes)
+
             temp_file.flush()
+
             audio = AudioSegment.from_file(temp_file.name, format="mp3")
 
             play(audio)
 
     else:
-        logging.error(f"Error TTS: {status}")
+        logging.error(f"I/O ERROR TTS: {status}")
 
     return status

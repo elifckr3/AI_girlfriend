@@ -332,8 +332,8 @@ def format_time(duration):
 
 
 def PROFILE(fn):
-    if not _is_enabled():
-        return fn
+    # if not _is_enabled():
+    #     return fn
 
     import line_profiler
 
@@ -351,8 +351,8 @@ def PROFILE(fn):
 
 
 def CPROFILE(fn):
-    if not _is_enabled():
-        return fn
+    # if not _is_enabled():
+    #     return fn
 
     import cProfile
     import pstats

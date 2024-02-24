@@ -2,14 +2,19 @@ import yaml
 import pytest
 import sys
 import os
-import json
+import io
 import logging
+
+# import pyttsx
+from gtts import gTTS
 from pydantic import BaseModel
 from utils.db import RedisConnect
 from agent.base import BotAgent, AgentNameExistsError
 from agent.capability import Capability
 from agent.io_interface import STT_CLIENTS, TTS_CLIENTS, TTT_CLIENTS
 from dev_tools.db_management import create_new_db
+from system_conf import SystemConfigPrompt
+from unittest.mock import patch
 
 db_connection = RedisConnect()
 
@@ -20,6 +25,14 @@ DEFAULT_DATA_PATH = "dev_tools/default_data/default_personalities.yml"
 
 def test_agent():
     logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+
+    sys_conf = SystemConfigPrompt().default_config()
+
+    logging.info(f"Initializing system with conf: {sys_conf}")
+
+    for key, value in sys_conf.items():
+        # logging.error(f"setting env var: {key} to {value}")
+        os.environ[key] = value
 
     create_new_db()
 
@@ -55,33 +68,49 @@ def test_agent():
     assert isinstance(context, str), "expected context to be a string"
 
     assert (
-        len(agent.memory.full_message_history) == 4
+        len(agent.memory.full_message_history) == 1
     ), "expected 4 messages in history (3 user msgs + 1 system msg (mood_evolver_prompt))"
 
-    # logging.debug("TESTING ttt clients")
-    # # XXX test all TTT_CLIENTS
-    # for client in TTT_CLIENTS:
-    #     os.environ["TTT_CLIENT"] = client
-    #     context = agent.manage_context(
-    #         ["random fluffy word", "maybe i said something else too"]
-    #     )
-    #     assert isinstance(context, str), "expected context to be a string"
+    logging.debug("TESTING ttt clients")
 
-    # logging.debug("TESTING listening")
+    for client in TTT_CLIENTS:
+        # TODO
+        if client == TTT_CLIENTS.INTERNAL:
+            continue
 
-    # # XXX - how to test these ? > mock audio buffer
+        os.environ["TTT_CLIENT"] = client.value
+        context = agent.manage_context(
+            ["random fluffy word", "maybe i said something else too"]
+        )
+        assert isinstance(context, str), "expected context to be a string"
+
+    logging.debug("TESTING listening")
+
     # agent.listen()
-    # # XXX test all STT_CLIENTS
-    # for client in STT_CLIENTS:
-    #     os.environ["STT_CLIENT"] = client
-    #     agent.listen()
+    for client in STT_CLIENTS:
+        os.environ["STT_CLIENT"] = client.value
 
-    # logging.debug("TESTING speaking")
+        if client == STT_CLIENTS.INTERNAL:
+            tts = gTTS("hello")
+            speech_bytes = io.BytesIO()
+            tts.write_to_fp(speech_bytes)
 
-    # # XXX - how to test these ? > mock audio buffer
-    # # XXX say testing
-    # agent.speak("hello")
-    # # XXX test all TTS_CLIENTS
-    # for client in TTS_CLIENTS:
-    #     os.environ["TTS_CLIENT"] = client
-    #     agent.speak("hello")
+            speech_bytes.seek(0)
+            mp3_data = speech_bytes.read()
+
+            with patch("clients.local_microphone._speech_recon_lib") as mock_inner:
+                mock_inner.return_value = mp3_data
+
+                agent.listen()
+        else:
+            agent.listen()
+
+    logging.debug("TESTING speaking")
+
+    for client in TTS_CLIENTS:
+        # TODO
+        if client == TTS_CLIENTS.INTERNAL:
+            continue
+
+        os.environ["TTS_CLIENT"] = client.value
+        agent.speak("testing, testing 1, 2, 3... Allan out!")

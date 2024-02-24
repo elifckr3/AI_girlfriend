@@ -30,9 +30,7 @@ formatter = ColoredFormatter(
 def pretty_logger(debug: bool = False):
     log_level = logging.DEBUG if debug else logging.INFO
 
-    logging.basicConfig(
-        level=log_level, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-    )
+    logging.basicConfig(level=log_level)
 
     for handler in logging.getLogger().handlers[:]:
         logging.getLogger().removeHandler(handler)

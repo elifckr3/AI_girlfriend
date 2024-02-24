@@ -94,7 +94,6 @@ class BotAgent(BaseModel):
 
     capabilities: list[str]
 
-    # TODO
     @property
     def cold_start_prompt(self):
         cold_start_prompt = prompt_loader(
@@ -169,7 +168,6 @@ class BotAgent(BaseModel):
         mood_dna: list[BotMoodAxiom],
         capabilities: list[str],
     ):
-        # TODO assert valid voice_id
         if db_connection.exists(f"agent:{name}"):
             logging.warning(f"Agent with name {name} already exists")
 
@@ -231,15 +229,12 @@ class BotAgent(BaseModel):
         # TODO
         logging.error(f"updating memory with ({update_type.value}) update type")
 
-    @timeit.CPROFILE
     def listen(self):
         return speech_to_text()
 
-    @timeit.CPROFILE
     def speak(self, response: str):
         text_to_speech(text=response, voice_id=self.metadata.voice_api_id)
 
-    @timeit.CPROFILE
     def manage_context(
         self, msgs: list[str], cold_start: bool = False
     ) -> str | Callable | None:

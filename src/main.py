@@ -8,7 +8,7 @@ import logging
 import sys
 from typing import Callable
 from personality_conf import PersonalityConfigPrompt
-from system_conf import SystemConfigPrompt, DEFAULT_SYS_CONF
+from system_conf import SystemConfigPrompt
 from agent.base import BotAgent, BotMemoryUpdateType
 from agent.message import RoleTypes
 from agent.capability import Capability
@@ -151,7 +151,7 @@ class ThreadManager:
 def main(
     debug: bool = False,
     default_bot: bool = False,
-    profile: bool = False,
+    # profile: bool = False,
     update_conf: bool = False,
     speach_off: bool = False,
     local_db: bool = False,
@@ -159,21 +159,23 @@ def main(
 ):
     pretty_console.pretty_logger(debug=debug)
 
-    if profile is True:
-        os.environ["PROFILE"] = "True"
+    # if profile is True:
+    #     os.environ["PROFILE"] = "True"
+
+    conf_settr = SystemConfigPrompt()
 
     if update_conf is True:
-        # TODO create conf models and run strat
-        sys_conf = SystemConfigPrompt.run()
+        # create config models and run strat
+        sys_conf = conf_settr.run()
 
     else:
-        sys_conf = DEFAULT_SYS_CONF
+        sys_conf = conf_settr.default_config()
 
     logging.info(f"Initializing system with conf: {sys_conf}")
 
     for key, value in sys_conf.items():
         os.environ[key] = value
-        # TODO download API keys from Redis
+    #     # TODO download API keys from Redis
 
     if default_bot is True:
         agent = BotAgent.find_agent("Allan Watts")
