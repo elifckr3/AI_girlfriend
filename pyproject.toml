@@ -32,6 +32,7 @@ dependencies = [
     "gTTS>=2.5.1",
     "pyttsx>=1.1",
     "rich>=13.7.0",
+    "pre-commit>=3.6.2",
 ]
 
 requires-python = "==3.11.*"
@@ -49,6 +50,7 @@ main.call = "src.main:app"
 # main.env = { PROFILE = "True" } # NOTE uncomment to profile 
 reset_db.call = "src.dev_tools.db_management:create_new_db"
 upload_env.call = "src.dev_tools.upload_env:upload_env"
+pre_commit.cmd = "pdm run pre-commit install"
 
 [tool.pdm.dev-dependencies]
 dev = ["pyaudio>=0.2.14"]
