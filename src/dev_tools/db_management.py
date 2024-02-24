@@ -2,24 +2,42 @@ import os
 import logging
 import json
 from pydantic import BaseModel
-from agent.base import BotAgent, BotPersonalityDna, BotMoodAxiom
-from utils.db import RedisConnect
-from utils.markdown_loader import prompt_loader
+from src.agent.base import BotAgent, BotPersonalityDna, BotMoodAxiom
+from src.utils.db import RedisConnect
+from src.utils.markdown_loader import prompt_loader
+# from src.system_conf import ENV_DATA
+
+# CAN_DELETE = False
+
+try:
+    from src.dev_tools.upload_env import upload_env
+
+    # CAN_DELETE = True
+
+except ImportError:
+    logging.error("upload_env not found")
 
 
 db_connection = RedisConnect()
 
 # CURR_DIR = os.getcwd()
-DEFAULT_DATA_PATH = f"src/dev_tools/default_data/default_personalities.json"
+DEFAULT_DATA_PATH = "src/dev_tools/default_data/default_personalities.json"
 
 
 def print_model(model: BaseModel):
-    logging.debug(json.dumps(model.model_dump(exclude=["model_config"]), indent=4))
+    from rich import print
+
+    print(model.model_dump(exclude=["model_config"]))
+
+    # logging.debug(json.dumps(model.model_dump(exclude=["model_config"]), indent=4))
 
 
 def create_new_db():
     logging.debug("erasing db + creating new defualt db")
+
     db_connection.erase_db()
+
+    upload_env()
 
     logging.debug("creating default bots")
     with open(DEFAULT_DATA_PATH) as file:
@@ -39,7 +57,9 @@ def create_new_db():
             capabilities=btd["capabilities"],
         )
 
-        logging.debug(bot.model_fields)
+        print_model(bot)
+
+        # logging.debug(bot.model_fields)
         assert bot.unique_name == btd["name"]
 
         logging.debug(f"testing save bot {bot.unique_name}")

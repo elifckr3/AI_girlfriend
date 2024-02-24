@@ -18,7 +18,7 @@ def test_user_conf():
     with create_pipe_input() as input:
         pipe = [
             "",
-            "allan watts",
+            "Allan Watts",
         ]
         for p in pipe:
             input.send_text(p)
@@ -28,7 +28,7 @@ def test_user_conf():
             test_input=input,
         ).run()
 
-    assert agent.unique_name == "allan watts"
+    assert agent.unique_name == "Allan Watts", "expected unique name to be Allan Watts"
 
     # with create_pipe_input() as inp:
     #     pipe = [

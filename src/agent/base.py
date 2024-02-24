@@ -3,13 +3,14 @@ from typing import Callable
 from pydantic import BaseModel, ConfigDict
 import logging
 from enum import Enum
-from utils.db import RedisConnect
-from agent.memory import BotAgentMemory
-from agent.io_interface import text_to_speech, speech_to_text, text_to_text
-from agent.capability import Capability
-from agent.message import RoleTypes, Message
-from utils.markdown_loader import prompt_loader
-from utils import timeit
+from src.agent.memory import BotAgentMemory
+from src.agent.io_interface import text_to_speech, speech_to_text, text_to_text
+from src.agent.capability import Capability
+from src.agent.message import RoleTypes, Message
+from src.utils.db import RedisConnect
+from src.utils.markdown_loader import prompt_loader
+from src.utils.ip import get_ip_address
+from src.utils import timeit
 
 db_connection = RedisConnect()
 
@@ -37,6 +38,15 @@ class BotPersonalityDna(BaseModel):
     language: str
 
     information: str
+
+    @classmethod
+    def create_new_personality_dna(cls):
+        return cls(
+            description="",
+            purpose="",
+            language="",
+            information="",
+        )
 
     @classmethod
     def get_field_prompt_text(cls, field_name: str):
@@ -87,6 +97,8 @@ class BotAgent(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
     unique_name: str
+
+    user_id: str
 
     metadata: BotMetadata
 
@@ -149,7 +161,7 @@ class BotAgent(BaseModel):
 
     @property
     def unique_db_key(self):
-        return f"agent:{self.unique_name}"
+        return f"agent:{self.user_id}:{self.unique_name}"
 
     @classmethod
     def available_bots(self):
@@ -168,7 +180,10 @@ class BotAgent(BaseModel):
         mood_dna: list[BotMoodAxiom],
         capabilities: list[str],
     ):
-        if db_connection.exists(f"agent:{name}"):
+        ip_address = get_ip_address()
+        logging.debug(f"IP Address: {ip_address}")
+
+        if db_connection.exists(f"agent:{ip_address}:{name}"):
             logging.warning(f"Agent with name {name} already exists")
 
             raise AgentNameExistsError(name=name)
@@ -178,6 +193,7 @@ class BotAgent(BaseModel):
 
             agent = cls(
                 unique_name=name,
+                user_id=ip_address,
                 metadata=BotMetadata(
                     voice_api_id=voice_id,
                     personality_dna=personality_dna,
@@ -193,12 +209,17 @@ class BotAgent(BaseModel):
 
     @classmethod
     def find_agent(cls, name: str):
-        if not db_connection.exists(f"agent:{name}"):
+        ip_address = get_ip_address()
+        logging.debug(f"IP Address: {ip_address}")
+
+        bot_key = f"agent:{ip_address}:{name}"
+
+        if not db_connection.exists(bot_key):
             logging.error(f"Agent named {name} does not exist")
 
             return None
 
-        bot = db_connection.read(f"agent:{name}")
+        bot = db_connection.read(bot_key)
 
         metadata = BotMetadata.load_meta(bot["metadata"])
 
@@ -206,6 +227,7 @@ class BotAgent(BaseModel):
 
         return cls(
             unique_name=bot["unique_name"],
+            user_id=bot["user_id"],
             metadata=metadata,
             memory=memory,
             capabilities=bot["capabilities"],

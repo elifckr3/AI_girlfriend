@@ -3,8 +3,8 @@ import os
 import logging
 from enum import Enum
 from typing import TypeVar
-from utils.prompt import Prompt, Question, QTypes
-from utils.db import RedisConnect
+from src.utils.prompt import Prompt, Question, QTypes
+from src.utils.db import RedisConnect
 
 
 db_connection = RedisConnect()
@@ -46,6 +46,17 @@ EL_TTS_VOICE_STABILITY = "voice_stability"
 EL_TTS_VOICE_SIMILARITY_BOOST = "voice_similarity_boost"
 
 
+# KEYS
+ENV_DATA = "env_data"
+OPENAI_KEY = "openai_key"
+ELEVEN_LABS_KEY = "eleven_labs_key"
+ASSEMBLYAI_KEY = "assembly_key"
+
+
+# OTHER
+SPEECH_OFF = "speech_off"
+
+
 def get_conf(var_name: str):
     """
     Get the value of an environment variable with automatic type conversion.
@@ -82,12 +93,12 @@ def get_conf(var_name: str):
 
 class SystemConfigPrompt(Prompt):
     def default_config(self):
-        from clients.openai import OpenAITTTModels, OpenAISTTModels
+        from src.clients.openai import OpenAITTTModels, OpenAISTTModels
 
         """
         Set the default configuration for the system
         """
-        from agent.io_interface import STT_CLIENTS, TTS_CLIENTS, TTT_CLIENTS
+        from src.agent.io_interface import STT_CLIENTS, TTS_CLIENTS, TTT_CLIENTS
 
         # clients
         os.environ[STT_CLIENT] = STT_CLIENTS.INTERNAL.value
@@ -122,7 +133,7 @@ class SystemConfigPrompt(Prompt):
         """
         Prompt clients chosen and their respective parameters
         """
-        from agent.io_interface import STT_CLIENTS, TTS_CLIENTS, TTT_CLIENTS
+        from src.agent.io_interface import STT_CLIENTS, TTS_CLIENTS, TTT_CLIENTS
 
         typer.secho("\n Configure OpenHome System settings: \n", fg=typer.colors.GREEN)
 
@@ -166,8 +177,8 @@ class SystemConfigPrompt(Prompt):
         return os.environ
 
     def _set_stt_params(self, client):
-        from agent.io_interface import STT_CLIENTS
-        from clients.openai import OpenAISTTModels
+        from src.agent.io_interface import STT_CLIENTS
+        from src.clients.openai import OpenAISTTModels
 
         typer.secho(
             f"\n Configuring {STT_CLIENTS.INTERNAL.value} client \n",
@@ -243,8 +254,8 @@ class SystemConfigPrompt(Prompt):
                 raise ValueError(f"Invalid client type: {client}")
 
     def _set_ttt_params(self, client):
-        from agent.io_interface import TTT_CLIENTS
-        from clients.openai import OpenAITTTModels
+        from src.agent.io_interface import TTT_CLIENTS
+        from src.clients.openai import OpenAITTTModels
 
         typer.secho(
             f"\n Configuring {TTT_CLIENTS.OPENAI.value} client \n",
@@ -288,7 +299,7 @@ class SystemConfigPrompt(Prompt):
                 raise ValueError(f"Invalid client type: {client}")
 
     def _set_tts_params(self, client):
-        from agent.io_interface import TTS_CLIENTS
+        from src.agent.io_interface import TTS_CLIENTS
 
         typer.secho(
             f"\n Configuring {TTS_CLIENTS.ELEVENLABS.value} client \n",

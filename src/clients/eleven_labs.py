@@ -5,10 +5,10 @@ from io import BytesIO
 from pydub import AudioSegment
 from pydub import AudioSegment
 from pydub.playback import play
-from clients.base_api_request import push_request
-from utils import timeit
+from src.clients.base_api_request import push_request
+from src.utils import timeit
+from src.system_conf import ELEVEN_LABS_KEY
 
-API_KEY = "15dec7728128dcdc7254dcfa7c1ab947"
 BASE_URL = "https://api.elevenlabs.io/v1/text-to-speech/"
 
 # TODO bring to user or system config
@@ -18,13 +18,18 @@ VOICE_SIMILARITY_BOOST = 0.85
 CURR_DIR = os.getcwd()
 
 
-# @timeit.PROFILE
+@timeit.PROFILE
 def eleven_labs_tts(text: str, voice_id: str) -> tuple[int, bytes] | None:
     url = f"{BASE_URL}{voice_id}"
 
+    api_key = os.environ.get(ELEVEN_LABS_KEY)
+
+    if api_key is None:
+        raise ValueError("ELEVEN_LABS_KEY is not set")
+
     headers = {
         "Accept": "audio/mpeg",
-        "xi-api-key": API_KEY,
+        "xi-api-key": os.environ.get(ELEVEN_LABS_KEY),
         "Content-Type": "application/json",
     }
 
@@ -34,6 +39,6 @@ def eleven_labs_tts(text: str, voice_id: str) -> tuple[int, bytes] | None:
         "voice_settings": {"stability": 0.6, "similarity_boost": 0.85},
     }
 
-    response = push_request(API_KEY, url, headers, data)
+    response = push_request(api_key, url, headers, data)
 
     return response.status_code, response.content

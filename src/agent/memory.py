@@ -9,7 +9,7 @@ from pydantic import (
     SkipValidation,
     field_serializer,
 )
-from agent.message import Message
+from src.agent.message import Message
 
 
 def default_user_memory_volume():

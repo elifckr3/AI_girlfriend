@@ -8,12 +8,12 @@ import logging
 # import pyttsx
 from gtts import gTTS
 from pydantic import BaseModel
-from utils.db import RedisConnect
-from agent.base import BotAgent, AgentNameExistsError
-from agent.capability import Capability
-from agent.io_interface import STT_CLIENTS, TTS_CLIENTS, TTT_CLIENTS
-from dev_tools.db_management import create_new_db
-from system_conf import SystemConfigPrompt
+from src.utils.db import RedisConnect
+from src.agent.base import BotAgent, AgentNameExistsError, BotPersonalityDna
+from src.agent.capability import Capability
+from src.agent.io_interface import STT_CLIENTS, TTS_CLIENTS, TTT_CLIENTS
+from src.dev_tools.db_management import create_new_db
+from src.system_conf import SystemConfigPrompt, ENV_DATA
 from unittest.mock import patch
 
 db_connection = RedisConnect()
@@ -26,23 +26,29 @@ DEFAULT_DATA_PATH = "dev_tools/default_data/default_personalities.yml"
 def test_agent():
     logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
+    create_new_db()
+
     sys_conf = SystemConfigPrompt().default_config()
 
-    logging.info(f"Initializing system with conf: {sys_conf}")
+    # logging.info(f"Initializing system with conf: {sys_conf}")/
 
     for key, value in sys_conf.items():
-        # logging.error(f"setting env var: {key} to {value}")
+        logging.debug(f"setting env var: {key} to {value}")
         os.environ[key] = value
 
-    create_new_db()
+    env_data = db_connection.read(key=ENV_DATA)
+
+    for key, value in env_data.items():
+        logging.debug(f"setting API keys: {key} to xxx ")
+        os.environ[key] = value
 
     logging.debug("TESTING non unique name bot")
     with pytest.raises(AgentNameExistsError):
         BotAgent.create(
             "Allan Watts",
             voice_id="1",
-            personality_dna={},
-            mood_dna={},
+            personality_dna=BotPersonalityDna.create_new_personality_dna(),
+            mood_dna=[],
             capabilities=[],
         )
 
@@ -86,7 +92,6 @@ def test_agent():
 
     logging.debug("TESTING listening")
 
-    # agent.listen()
     for client in STT_CLIENTS:
         os.environ["STT_CLIENT"] = client.value
 

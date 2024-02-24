@@ -6,11 +6,11 @@ import soundfile as sf
 import logging
 
 import speech_recognition as sr
-from clients.openai import OpenAiClient
+from src.clients.openai import OpenAiClient
 from time import time
-from utils import timeit
+from src.utils import timeit
 
-from system_conf import (
+from src.system_conf import (
     get_conf,
     LOCAL_RECORDING_PAUSE_THRESHOLD,
     LOCAL_RECORDING_NON_SPEAKING_DURATION,
@@ -47,14 +47,12 @@ def local_record_online_transcribe():
 
     recording = _speech_recon_lib()
 
-    # logging.debug(f"ADJHAGD. {recording}")
-
     transcription = OpenAiClient().stt(recording)
 
     return transcription
 
 
-# @timeit.PROFILE
+@timeit.PROFILE
 def _speech_recon_lib():
     """
     Simple speech recognition library. Detects phrases based on energy of what means silence and bunch of duration params

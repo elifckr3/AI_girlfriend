@@ -5,18 +5,17 @@ from enum import Enum
 import logging
 import openai
 from pydub import AudioSegment
-from utils import timeit
+from src.utils import timeit
 
-from system_conf import (
+from src.system_conf import (
     get_conf,
     OPENAI_TTT_MODEL,
     OPENAI_TTT_TEMPERATURE,
     OPENAI_TTT_FREQUENCY_PENALTY,
     OPENAI_TTT_PRESENCE_PENALTY,
     OPENAI_STT_MODEL,
+    OPENAI_KEY,
 )
-
-API_KEY = "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"
 
 
 class OpenAITTTModels(Enum):
@@ -30,7 +29,12 @@ class OpenAISTTModels(Enum):
 
 class OpenAiClient:
     def __init__(self):
-        openai.api_key = API_KEY  # TODO
+        api_key = os.environ.get(OPENAI_KEY)
+
+        if api_key is None:
+            raise ValueError("OPENAI_KEY is not set")
+
+        openai.api_key = api_key
 
     @timeit.PROFILE
     def ttt(self, messages_input: list[str]):
@@ -48,7 +52,6 @@ class OpenAiClient:
             presence_penalty = get_conf(OPENAI_TTT_PRESENCE_PENALTY)
             logging.debug(f"OPENAI TTT presence_penalty: {presence_penalty}")
 
-            openai.api_key = API_KEY
             completion = openai.ChatCompletion.create(
                 model=model,
                 temperature=temperature,
@@ -66,7 +69,7 @@ class OpenAiClient:
 
         return chat_response
 
-    # @timeit.PROFILE
+    @timeit.PROFILE
     def stt(self, mp3_buffer: bytes):
         transcription = None
         try:
@@ -79,9 +82,11 @@ class OpenAiClient:
             with tempfile.NamedTemporaryFile(suffix=".mp3", delete=True) as temp_file:
                 temp_file.write(mp3_buffer)
 
-                result = openai.Audio.translate(model=model, file=temp_file)
-
                 temp_file.flush()
+
+                temp_file.seek(0)
+
+                result = openai.Audio.translate(model=model, file=temp_file)
 
             transcription = result["text"]
 
@@ -89,8 +94,13 @@ class OpenAiClient:
             logging.error("Error %s" % e)
 
         else:
-            if transcription is None or transcription == "":
+            if transcription is None:
                 logging.error(f"Error OpenAI STT: {transcription}")
+
+            elif isinstance(transcription, str):
+                logging.debug(
+                    f"OpenAI STT (transcription) empty string: {transcription}"
+                )
 
             else:
                 logging.debug(f"OpenAI STT (transcription): {transcription}")

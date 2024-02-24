@@ -2,10 +2,10 @@ import os
 import typer
 import logging
 from enum import Enum
-from utils.prompt import Prompt, Question, QTypes
-from agent.base import BotAgent, BotPersonalityDna, BotMoodAxiom
-from agent.io_interface import TTS_CLIENTS, text_to_speech
-from utils.db import RedisConnect
+from src.utils.prompt import Prompt, Question, QTypes
+from src.agent.base import BotAgent, BotPersonalityDna, BotMoodAxiom
+from src.agent.io_interface import TTS_CLIENTS, text_to_speech
+from src.utils.db import RedisConnect
 
 db_connection = RedisConnect()
 

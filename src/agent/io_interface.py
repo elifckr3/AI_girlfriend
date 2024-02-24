@@ -3,11 +3,11 @@ import os
 import logging
 import tempfile
 from enum import Enum
-from clients.openai import OpenAiClient
-from clients.eleven_labs import eleven_labs_tts
-from clients.assembly import assembly_transcribe
-from clients.local_microphone import local_record_online_transcribe
-from system_conf import get_conf, STT_CLIENT, TTT_CLIENT, TTS_CLIENT
+from src.clients.openai import OpenAiClient
+from src.clients.eleven_labs import eleven_labs_tts
+from src.clients.assembly import assembly_transcribe
+from src.clients.local_microphone import local_record_online_transcribe
+from src.system_conf import get_conf, STT_CLIENT, TTT_CLIENT, TTS_CLIENT, SPEECH_OFF
 from pydub import AudioSegment
 from pydub.playback import play
 
@@ -50,7 +50,7 @@ def speech_to_text():
         case _:
             logging.error(f"Invalid client type: {client}")
 
-    if text == "" or text is None:
+    if text is None:
         logging.error(f"I/O Error STT: {text}")
 
     else:
@@ -80,6 +80,10 @@ def text_to_text(messages_input: str) -> str | None:
 
 
 def text_to_speech(text: str, voice_id: str) -> int:
+    if os.environ.get(SPEECH_OFF):
+        logging.debug("Speech is off")
+        return 200
+
     client = get_conf(TTS_CLIENT)
 
     logging.debug(f"TTS_CLIENT: {client}")

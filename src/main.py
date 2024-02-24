@@ -7,15 +7,19 @@ import threading
 import logging
 import sys
 from typing import Callable
-from personality_conf import PersonalityConfigPrompt
-from system_conf import SystemConfigPrompt
-from agent.base import BotAgent, BotMemoryUpdateType
-from agent.message import RoleTypes
-from agent.capability import Capability
-from utils import timeit, pretty_console
+from src.personality_conf import PersonalityConfigPrompt
+from src.system_conf import SystemConfigPrompt, ENV_DATA
+from src.agent.base import BotAgent, BotMemoryUpdateType
+from src.agent.message import RoleTypes
+from src.agent.capability import Capability
+from src.utils import timeit, pretty_console
+from src.utils.db import RedisConnect
+from typing_extensions import Annotated
 from queue import Queue
 
 app = typer.Typer()
+
+db = RedisConnect()
 
 # TODO test race conditions > in Rust concurrency will be garuanteed
 
@@ -149,18 +153,22 @@ class ThreadManager:
 
 @app.command()
 def main(
-    debug: bool = False,
-    default_bot: bool = False,
-    # profile: bool = False,
-    update_conf: bool = False,
-    speach_off: bool = False,
-    local_db: bool = False,
-    mock_api: bool = False,
+    debug: Annotated[  # TODO i hate how these annotations force you to express the CLI without --flags
+        bool, typer.Argument(help="Debug mode with DEBUG level logging")
+    ] = False,
+    default_bot: Annotated[
+        bool, typer.Argument(help="Use default bot (Allan Watts)")
+    ] = False,
+    update_conf: Annotated[
+        bool, typer.Argument(help="Toggle prompts to update system configuration")
+    ] = False,
+    speach_off: Annotated[
+        bool, typer.Argument(help="Toggle speach off for debugging")
+    ] = False,
+    # local_db: bool = False,
+    # mock_api: bool = False,
 ):
     pretty_console.pretty_logger(debug=debug)
-
-    # if profile is True:
-    #     os.environ["PROFILE"] = "True"
 
     conf_settr = SystemConfigPrompt()
 
@@ -174,8 +182,18 @@ def main(
     logging.info(f"Initializing system with conf: {sys_conf}")
 
     for key, value in sys_conf.items():
+        logging.debug(f"setting env var: {key} to {value}")
+
         os.environ[key] = value
-    #     # TODO download API keys from Redis
+
+    env_data = db.read(key=ENV_DATA)
+
+    for key, value in env_data.items():
+        logging.debug(f"setting API keys: {key} to xxx ")
+        os.environ[key] = value
+
+    if speach_off is True:
+        os.environ["SPEECH_OFF"] = "True"
 
     if default_bot is True:
         agent = BotAgent.find_agent("Allan Watts")
@@ -188,5 +206,5 @@ def main(
     ThreadManager(agent=agent, debug=debug).single_thread()
 
 
-if __name__ == "__main__":
-    app()
+# if __name__ == "__main__":
+#     app()
