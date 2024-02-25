@@ -1,6 +1,6 @@
 # OpenHome
 
-👋 Hello, world!
+👋 Hello, world
 
 I'm thrilled to introduce you to OpenHome - an open-source AI smart speaker project.
 
