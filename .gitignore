@@ -5,3 +5,5 @@ __pycache__/
 .pdm-python
 *.prof
 *.rdb
+.DS_Store
+.env
