@@ -62,7 +62,7 @@ repos:
   - id: pytest
     name: running tests (1-3 mins)
     types: [python]
-    additional_dependencies: [pdm]
+    additional_dependencies: [pdm, pytest]
     entry: pdm run pytest -s tests/
     # additional_dependencies: [pdm, pytest]
     language: script
