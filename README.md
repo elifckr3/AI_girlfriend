@@ -111,3 +111,25 @@ pdm run main -p 1
 - `<Enter personality>`: Pass your desired personality
 
 `Note: If you enter a name that do not exists in our personality list you will be given list of personalities to choose one from them.`
+
+
+## How to build a capability?
+
+Copy and paste a new version of template.py in the capabilities/ folder.
+
+Register the capability as follows alongside it's function call
+
+#TODO 
+- [ ] test tool
+- [ ] unique hotword matching
+- [ ] I/O passing to caller
+
+```python
+class TimerCapability(Capability):
+    @classmethod
+    def register_capability(cls):
+        return cls(unique_name="timer", hotwords=["call", "timer"])
+
+    def call(self):
+        time.sleep(2)
+```

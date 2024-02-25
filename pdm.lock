@@ -2,10 +2,10 @@
 # It is not intended for manual editing.
 
 [metadata]
-groups = ["default", "dev"]
+groups = ["default"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:50a665536b2c3f6f00152d472f63e83e86473f71c333c1e15eebef94c6787e3c"
+content_hash = "sha256:a82bc9730ac0b532875349da9e501fa5f48837a1dcc9fe455b5428521d0bd4be"
 
 [[package]]
 name = "aiohttp"
@@ -641,7 +641,7 @@ files = [
 name = "pyaudio"
 version = "0.2.14"
 summary = "Cross-platform audio I/O with PortAudio"
-groups = ["default", "dev"]
+groups = ["default"]
 files = [
     {file = "PyAudio-0.2.14-cp311-cp311-win32.whl", hash = "sha256:506b32a595f8693811682ab4b127602d404df7dfc453b499c91a80d0f7bad289"},
     {file = "PyAudio-0.2.14-cp311-cp311-win_amd64.whl", hash = "sha256:bbeb01d36a2f472ae5ee5e1451cacc42112986abe622f735bb870a5db77cf903"},
