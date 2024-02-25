@@ -65,7 +65,7 @@ repos:
     additional_dependencies: [pdm, pytest]
     entry: pdm run pytest -s tests/
     # additional_dependencies: [pdm, pytest]
-    language: script
+    language: python
     # types: [python]
     stages: [pre-push]
     always_run: true
