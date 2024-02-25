@@ -160,8 +160,8 @@ class Prompt(BaseModel, ABC):
 
                 value_to_enum = {e.value: e for e in q.enum_struct}  # type: ignore
 
-                q_dict["filter"] = (
-                    lambda val, vte=value_to_enum: [vte.get(v) for v in val]
+                q_dict["filter"] = lambda val, vte=value_to_enum: (
+                    [vte.get(v) for v in val]
                     if isinstance(val, list | tuple)
                     else vte.get(val)
                 )
@@ -195,13 +195,13 @@ class Prompt(BaseModel, ABC):
                         choices=q_dict["choices"],
                     )
 
-                    q_dict[
-                        "filter"
-                    ] = lambda res, q=q, q_dict=q_dict: clean_numeric_result(
-                        result=res,
-                        dtype="int" if q.qtype is QTypes.INT else "float",
-                        choices=q_dict["choices"],
-                        default=q.default,
+                    q_dict["filter"] = (
+                        lambda res, q=q, q_dict=q_dict: clean_numeric_result(
+                            result=res,
+                            dtype="int" if q.qtype is QTypes.INT else "float",
+                            choices=q_dict["choices"],
+                            default=q.default,
+                        )
                     )
 
                 else:

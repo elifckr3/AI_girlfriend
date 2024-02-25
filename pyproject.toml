@@ -59,7 +59,7 @@ dev = ["pyaudio>=0.2.14"]
 # Enable the pycodestyle (`E`) and Pyflakes (`F`) rules by default.
 # Unlike Flake8, Ruff doesn't enable pycodestyle warnings (`W`) or
 # McCabe complexity (`C901`) by default.
-select = [
+lint.select = [
     # pyflakes
     "F",
     # pycodestyle
@@ -106,7 +106,7 @@ select = [
     # one-blank-line-after-class
     "D204",
 ]
-ignore = [
+lint.ignore = [
     "E402",
     "B008",
     "B006",
@@ -116,6 +116,6 @@ ignore = [
 
 ] #"E501"
 
-fixable = ["ALL"]
+lint.fixable = ["ALL"]
 
 line-length = 88
