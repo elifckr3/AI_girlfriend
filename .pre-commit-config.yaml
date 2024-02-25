@@ -1,3 +1,6 @@
+default_install_hook_types: [pre-commit, pre-push, post-merge]
+
+
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
   rev: v4.5.0
@@ -64,9 +67,7 @@ repos:
     types: [python]
     additional_dependencies: [pdm, pytest]
     entry: pdm run pytest -s tests/
-    # additional_dependencies: [pdm, pytest]
     language: python
-    # types: [python]
     stages: [pre-push]
     always_run: true
     verbose: true
