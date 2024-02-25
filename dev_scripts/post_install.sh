@@ -18,11 +18,9 @@ install_pre_commit_hooks() {
     pre-commit install
 }
 
-redis-server
 
 check_pre_commit
 
 pre-commit autoupdate
 
-
-
+redis-server --daemonize yes
