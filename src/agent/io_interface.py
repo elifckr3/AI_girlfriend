@@ -33,7 +33,7 @@ def get_client_from_env():
     return wrapper
 
 
-def speech_to_text():
+def speech_to_text() -> str:
     client = get_conf(STT_CLIENT)
 
     logging.debug(f"STT_CLIENT: {client}")
@@ -49,8 +49,8 @@ def speech_to_text():
         case _:
             logging.error(f"Invalid client type: {client}")
 
-    if text is None:
-        logging.error(f"I/O Error STT: {text}")
+    if text is None or not isinstance(text, str):
+        raise ValueError(f"I/O Error STT: {text}")
 
     else:
         logging.debug(f"I/O STT transcription: {text}")

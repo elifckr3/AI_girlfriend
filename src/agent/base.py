@@ -258,7 +258,7 @@ class BotAgent(BaseModel):
 
     def manage_context(
         self,
-        msgs: list[str],
+        msgs: str,
         cold_start: bool = False,
     ) -> str | Callable | None:
         """

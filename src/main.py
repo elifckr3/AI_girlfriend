@@ -126,14 +126,16 @@ class ThreadManager:
     def single_thread(self):
         self.agent.memory.full_message_history = []
 
-        context = self.agent.manage_context(msgs=[], cold_start=True)
+        # context = self.agent.manage_context(msgs=[], cold_start=True)
 
-        self.agent.speak(response=context)
+        # self.agent.speak(response=context)
 
-        time.sleep(2)
+        time.sleep(1)
 
         while True:
             msgs = self.agent.listen()
+
+            logging.error(f"msgs: {msgs}")
 
             self.agent.save_message(msgs, role=RoleTypes.USER)
 
