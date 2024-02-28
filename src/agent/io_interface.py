@@ -11,7 +11,7 @@ from pydub import AudioSegment
 from pydub.playback import play
 
 # new imports dor deepgram
-from src.clients.deepgram_test import DeepGram
+from src.clients.deepgram import deepgram_trascription
 from threading import Event
 
 class STT_CLIENTS(Enum):
@@ -45,12 +45,14 @@ def speech_to_text():
     match client:
         case STT_CLIENTS.INTERNAL.value:
             # text = local_record_online_transcribe()
-            result_event = Event()
+            # result_event = Event()
             # Create an instance of DeepGram
-            deepgram_instance = DeepGram()
-            text = deepgram_instance.deepgram_trascription(result_event)
-            # print('text', text)
-            result_event.wait() # Wait for the transcription to complete
+            # deepgram_instance = DeepGram()
+            # text = deepgram_instance.deepgram_trascription(result_event)
+            text = deepgram_trascription()
+            text = " ".join(text)
+            print('text', text)
+            # result_event.wait() # Wait for the transcription to complete
 
         case STT_CLIENTS.ASSEMBLY.value:
             text = assembly_transcribe()
