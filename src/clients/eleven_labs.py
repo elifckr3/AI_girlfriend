@@ -29,7 +29,7 @@ def eleven_labs_tts(text: str, voice_id: str) -> tuple[int, bytes] | None:
 
     data = {
         "text": text,
-        "model_id": "eleven_monolingual_v1",
+        "model_id": "eleven_turbo_v2",
         "voice_settings": {"stability": 0.6, "similarity_boost": 0.85},
     }
 

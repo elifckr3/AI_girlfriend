@@ -9,6 +9,7 @@ from src.clients.local_microphone import local_record_online_transcribe
 from src.system_conf import get_conf, STT_CLIENT, TTT_CLIENT, TTS_CLIENT, SPEECH_OFF
 from pydub import AudioSegment
 from pydub.playback import play
+from time import time
 
 # new imports dor deepgram
 from src.clients.deepgram import deepgram_trascription
@@ -44,16 +45,13 @@ def speech_to_text() -> str:
     text = None
     match client:
         case STT_CLIENTS.INTERNAL.value:
+            # Openai whisper implementation
             # text = local_record_online_transcribe()
-            # result_event = Event()
-            # Create an instance of DeepGram
-            # deepgram_instance = DeepGram()
-            # text = deepgram_instance.deepgram_trascription(result_event)
-            text = deepgram_trascription()
-            text = " ".join(text)
-            print('text', text)
-            # result_event.wait() # Wait for the transcription to complete
 
+            # Deepgram STT implementation
+            text = deepgram_trascription()
+
+            logging.info(f"STT: {text}")
         case STT_CLIENTS.ASSEMBLY.value:
             text = assembly_transcribe()
 
@@ -70,6 +68,7 @@ def speech_to_text() -> str:
 
 
 def text_to_text(messages_input: str) -> str | None:
+    stime = time()
     client = get_conf(TTT_CLIENT)
 
     logging.debug(f"TTT_CLIENT: {client}")
@@ -86,10 +85,13 @@ def text_to_text(messages_input: str) -> str | None:
         case _:
             raise ValueError(f"Invalid client type: {client}")
 
+    tdiff = time()-stime
+    logging.info("Time taken for GPTresponse: %s"%tdiff)
     return text
 
 
 def text_to_speech(text: str, voice_id: str) -> int:
+    stime = time()
     if os.environ.get(SPEECH_OFF):
         logging.debug("Speech is off")
         return 200
@@ -127,6 +129,8 @@ def text_to_speech(text: str, voice_id: str) -> int:
 
             audio = AudioSegment.from_file(temp_file.name, format="mp3")
 
+            tdiff = time()-stime
+            logging.info("Time taken for eleven labs: %s"%tdiff)
             play(audio)
 
     else:

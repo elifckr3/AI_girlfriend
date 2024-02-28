@@ -272,7 +272,7 @@ class BotAgent(BaseModel):
         """
         logging.debug(f"managing context: {msgs}")
 
-        capability = Capability.match_capability([msgs])
+        capability = Capability.match_capability(msgs)
 
         if capability is not None:
             assert isinstance(

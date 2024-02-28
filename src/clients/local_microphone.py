@@ -5,6 +5,7 @@ import logging
 import speech_recognition as sr
 from src.clients.openai import OpenAiClient
 from src.utils import timeit
+from time import time
 
 from src.system_conf import (
     get_conf,
@@ -43,8 +44,11 @@ def local_record_online_transcribe():
 
     recording = _speech_recon_lib()
 
+    stime = time()
     transcription = OpenAiClient().stt(recording)
 
+    tdiff = time()-stime
+    logging.info("Time taken for STT OpenAI Whisper: %s"%tdiff)
     return transcription
 
 
