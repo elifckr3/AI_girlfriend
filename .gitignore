@@ -3,3 +3,7 @@ __pycache__/
 *$py.class
 .cache
 .pdm-python
+*.prof
+*.rdb
+*.DS_Store
+.env

@@ -1,0 +1,121 @@
+[project]
+name = "openhome"
+version = "0.1.0"
+description = "Opensource AI Smart Speaker"
+
+dependencies = [
+    "sounddevice~=0.4.6",
+    "soundfile~=0.12.1",
+    "numpy~=1.26.3",
+    "openai==0.28.0",
+    "colorama~=0.4.6",
+    "pydub~=0.25.1",
+    "PyYAML>=6.0.1",
+    "SpeechRecognition~=3.10.1",
+    "fuzzywuzzy~=0.18.0",
+    "python-Levenshtein~=0.24.0",
+    "spotipy~=2.23.0",
+    "pyaudio>=0.2.14",
+    "pydantic>=2.6.1",
+    "prompt-toolkit>=3.0.43",
+    "typer>=0.9.0",
+    "questionary>=1.10.0",
+    "ruff>=0.2.2",
+    "pytest>=8.0.1",
+    "pytz>=2024.1",
+    "simpleaudio>=1.0.4",
+    "line-profiler>=4.1.2",
+    "assemblyai>=0.22.0",
+    "colorlog>=6.8.2",
+    "jinja2>=3.1.3",
+    "redis>=5.0.1",
+    "gTTS>=2.5.1",
+    "pyttsx>=1.1",
+    "rich>=13.7.0",
+    "pre-commit>=3.6.2",
+]
+
+requires-python = "==3.11.*"
+readme = "README.md"
+license = { text = "TBD" }
+
+
+[tool.pdm]
+distribution = false
+
+[tool.pdm.scripts]
+pre_install = "dev_scripts/pre_install.sh"
+post_install = "dev_scripts/post_install.sh"
+main.call = "src.main:app"
+# main.env = { PROFILE = "True" } # NOTE uncomment to profile
+reset_db.call = "src.dev_tools.db_management:create_new_db"
+upload_env.call = "src.dev_tools.upload_env:upload_env"
+pre_commit.cmd = "pdm run pre-commit install"
+
+# [tool.pdm.dev-dependencies]
+# dev = ["pyaudio>=0.2.14"]
+
+[tool.ruff]
+# Enable the pycodestyle (`E`) and Pyflakes (`F`) rules by default.
+# Unlike Flake8, Ruff doesn't enable pycodestyle warnings (`W`) or
+# McCabe complexity (`C901`) by default.
+lint.select = [
+    # pyflakes
+    "F",
+    # pycodestyle
+    "E",
+    "W",
+    # flake8-2020
+    "YTT",
+    # flake8-bugbear
+    "B",
+    # flake8-commas
+    "COM",
+    # flake8-datetimez
+    "DTZ",
+    # flake8-debugger
+    "T10",
+    # flake8-gettext
+    "INT",
+    # flake8-quotes
+    "Q",
+    # pylint
+    "PL",
+    # misc lints
+    "PIE",
+    # flake8-pyi
+    "PYI",
+    # tidy imports
+    "TID",
+    # implicit string concatenation
+    "ISC",
+    # type-checking imports
+    "TCH",
+    # isort
+    # "I",
+    # comprehensions
+    "C4",
+    # pygrep-hooks
+    "PGH",
+    # Ruff-specific rules
+    "RUF",
+    # Upgrade syntax
+    "UP",
+    # one-blank-line-before-class
+    "D203",
+    # one-blank-line-after-class
+    "D204",
+]
+lint.ignore = [
+    "E402",
+    "B008",
+    "B006",
+    "E731",
+    # too many arguments to function call
+    "PLR0913",
+
+] #"E501"
+
+lint.fixable = ["ALL"]
+
+line-length = 88
