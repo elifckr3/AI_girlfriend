@@ -15,7 +15,7 @@ db_connection = RedisConnect()
 STT_CLIENT = "STT_CLIENT"
 TTT_CLIENT = "TTT_CLIENT"
 TTS_CLIENT = "TTS_CLIENT"
-
+DEEPGRAM_KEY = "deepgram_key"
 # > CLIENT PARAMS
 
 # >> LOCAL (STT)
