@@ -48,8 +48,8 @@ def speech_to_text():
             result_event = Event()
             # Create an instance of DeepGram
             deepgram_instance = DeepGram()
-            recording = deepgram_instance.deepgram_trascription(result_event)
-            print('recording', recording)
+            text = deepgram_instance.deepgram_trascription(result_event)
+            # print('text', text)
             result_event.wait() # Wait for the transcription to complete
 
         case STT_CLIENTS.ASSEMBLY.value:
