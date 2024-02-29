@@ -286,11 +286,13 @@ class BotAgent(BaseModel):
             response_prompt = self.cold_start_prompt
 
         else:
-            mood_evolver_strat = text_to_text(messages_input=self.mood_evolver_prompt)
+            # TODO make it asynchronous and fix its templating prompt
+            # mood_evolver_strat = text_to_text(messages_input=self.mood_evolver_prompt)
 
-            logging.debug(f"mood evolving strategy (post TTT): {mood_evolver_strat}")
+            # logging.debug(f"mood evolving strategy (post TTT): {mood_evolver_strat}")
 
-            self.save_message(message=mood_evolver_strat, role=RoleTypes.SYSTEM)
+            # self.save_message(message=mood_evolver_strat, role=RoleTypes.SYSTEM)
+            
             # TODO ensure no race conditions can occur between save and read
             # - may need to have async await saves
             response_prompt = self.response_prompt

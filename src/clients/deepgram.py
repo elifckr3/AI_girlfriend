@@ -22,7 +22,8 @@ load_dotenv()
 
 def deepgram_trascription():
     try:
-        print('listening')
+        # TODO new dg connection needs to be optimized 
+        logging.info('starting mic')
         api_key = os.environ.get(DEEPGRAM_KEY)
         # Open a microphone stream on the default input device
         microphone: Microphone
@@ -59,6 +60,7 @@ def deepgram_trascription():
             nonlocal microphone
             logging.info(f"speaker: {sentence_buffer}")
             sentences_added.append(sentence_buffer)
+            logging.info('stopped listening...')
             # print(f"\n\n{utterance_end}\n\n")
             microphone.finish()
             stime = time()
@@ -74,7 +76,7 @@ def deepgram_trascription():
         dg_connection.on(LiveTranscriptionEvents.Error, on_error)
 
         options: LiveOptions = LiveOptions(
-            model="nova-2-phonecall",
+            model="nova-2-general",
             punctuate=False,
             language="en-US",
             encoding="linear16",
@@ -83,22 +85,26 @@ def deepgram_trascription():
             interim_results=True,
             utterance_end_ms="1000",
             vad_events=True,
+            endpointing=100
         )
         dg_connection.start(options)
 
+        logging.info('listening...')
         # Open a microphone stream on the default input device
         microphone: Microphone = Microphone(dg_connection.send)
 
         # start microphone
         microphone.start()
-        while True:
-            if not microphone.is_active():
-                break
-            sleep(0.2)
-        dg_connection.finish()
+        while microphone.is_active():
+            # if not microphone.is_active():
+            #     break
+            sleep(0.1)
+        dg_connection.signal_exit()
         final_text = " ".join(sentences_added)
         tdiff = time()-stime
+
         logging.info("Time taken for stt deepgram: %s"%tdiff)
+
         return final_text
     except Exception as e:
         logging.WARN(f"Could not open socket: {e}")

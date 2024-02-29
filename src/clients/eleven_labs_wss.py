@@ -53,7 +53,9 @@ async def stream(audio_stream):
 
     logging.debug("Started streaming audio")
     async for chunk in audio_stream:
-        logging.info("%s: Audio chunk received from elevenlabs websocket: %s KBs..."%(time(),sys.getsizeof(chunk)/1000))
+
+        logging.debug("Audio chunk received from elevenlabs websocket: %s KBs..."%(sys.getsizeof(chunk)/1000))
+
         if chunk:
             mpv_process.stdin.write(chunk)
             mpv_process.stdin.flush()

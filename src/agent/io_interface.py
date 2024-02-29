@@ -88,7 +88,9 @@ def text_to_text(messages_input: str) -> str | None:
             raise ValueError(f"Invalid client type: {client}")
 
     tdiff = time()-stime
-    logging.info("%sTime taken for GPTresponse: %s"%(time(),tdiff))
+
+    logging.info("Time taken for GPTresponse: %s"%(tdiff))
+
     return text
 
 
