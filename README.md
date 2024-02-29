@@ -100,6 +100,22 @@ pdm install
 ```
 
 You can also use homebrew to install these modules. brew install ffmpeg, portaudio, etc
+
+## How to install mpv?
+
+For linux
+```bash
+apt-get install mpv
+```
+For Mac
+```bash
+brew install mpv
+```
+
+For Windows
+- https://mpv.io/installation/
+
+
 ## How to run the main pipeline?
 
 To run the main pipeline, run the following command:

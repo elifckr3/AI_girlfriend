@@ -4,7 +4,7 @@ from pydantic import BaseModel, ConfigDict
 import logging
 from enum import Enum
 from src.agent.memory import BotAgentMemory
-from src.agent.io_interface import text_to_speech, speech_to_text, text_to_text
+from src.agent.io_interface import text_to_speech_wss, speech_to_text, text_to_text
 from src.agent.capability import Capability
 from src.agent.message import RoleTypes, Message
 from src.utils.db import RedisConnect
@@ -254,7 +254,7 @@ class BotAgent(BaseModel):
         return speech_to_text()
 
     def speak(self, response: str):
-        text_to_speech(text=response, voice_id=self.metadata.voice_api_id)
+        text_to_speech_wss(text=response, voice_id=self.metadata.voice_api_id)
 
     def manage_context(
         self,

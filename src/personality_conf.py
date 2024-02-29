@@ -4,7 +4,7 @@ import logging
 from enum import Enum
 from src.utils.prompt import Prompt, Question, QTypes
 from src.agent.base import BotAgent, BotPersonalityDna, BotMoodAxiom
-from src.agent.io_interface import TTS_CLIENTS, text_to_speech
+from src.agent.io_interface import TTS_CLIENTS, text_to_speech_wss
 from src.utils.db import RedisConnect
 
 db_connection = RedisConnect()
@@ -128,7 +128,7 @@ class PersonalityConfigPrompt(Prompt):
 
             # check if voice exists on with client
             os.environ["TTS_CLIENT"] = TTS_CLIENTS.ELEVENLABS.value
-            status = text_to_speech(text="testing", voice_id=voice)
+            status = text_to_speech_wss(text="testing", voice_id=voice)
             api_voice_exists = lambda x, status=status: status in (200, 1)
             if not api_voice_exists(voice):
                 typer.secho(

@@ -135,7 +135,7 @@ class ThreadManager:
         while True:
             msgs = self.agent.listen()
 
-            logging.error(f"msgs: {msgs}")
+            logging.info(f"msgs: {msgs}")
 
             self.agent.save_message(msgs, role=RoleTypes.USER)
 

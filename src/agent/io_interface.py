@@ -4,12 +4,14 @@ import tempfile
 from enum import Enum
 from src.clients.openai import OpenAiClient
 from src.clients.eleven_labs import eleven_labs_tts
+from src.clients.eleven_labs_wss import eleven_labs_wss_tts
 from src.clients.assembly import assembly_transcribe
 from src.clients.local_microphone import local_record_online_transcribe
 from src.system_conf import get_conf, STT_CLIENT, TTT_CLIENT, TTS_CLIENT, SPEECH_OFF
 from pydub import AudioSegment
 from pydub.playback import play
 from time import time
+import asyncio
 
 # new imports dor deepgram
 from src.clients.deepgram import deepgram_trascription
@@ -51,7 +53,7 @@ def speech_to_text() -> str:
             # Deepgram STT implementation
             text = deepgram_trascription()
 
-            logging.info(f"STT: {text}")
+            # logging.info(f"STT: {text}")
         case STT_CLIENTS.ASSEMBLY.value:
             text = assembly_transcribe()
 
@@ -86,7 +88,7 @@ def text_to_text(messages_input: str) -> str | None:
             raise ValueError(f"Invalid client type: {client}")
 
     tdiff = time()-stime
-    logging.info("Time taken for GPTresponse: %s"%tdiff)
+    logging.info("%sTime taken for GPTresponse: %s"%(time(),tdiff))
     return text
 
 
@@ -135,5 +137,33 @@ def text_to_speech(text: str, voice_id: str) -> int:
 
     else:
         logging.error(f"I/O ERROR TTS: {status}")
+
+    return status
+
+def text_to_speech_wss(text: str, voice_id: str) -> int:
+    if os.environ.get(SPEECH_OFF):
+        logging.debug("Speech is off")
+        return 200
+
+    client = get_conf(TTS_CLIENT)
+
+    logging.debug(f"TTS_CLIENT: {client}")
+
+    status = 0
+    audio_bytes = None
+    match client:
+        case TTS_CLIENTS.INTERNAL.value:
+            pass
+
+        case TTS_CLIENTS.ELEVENLABS.value:
+            asyncio.run(eleven_labs_wss_tts(
+                text=text,
+                voice_id=voice_id,
+            ))
+            status = 1
+
+        case _:
+            logging.error(f"Invalid client type: {client}")
+            return
 
     return status

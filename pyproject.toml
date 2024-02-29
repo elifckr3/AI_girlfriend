@@ -34,7 +34,8 @@ dependencies = [
     "rich>=13.7.0",
     "pre-commit>=3.6.2",
     "deepgram-sdk",
-    "pdm-dotenv"
+    "pdm-dotenv",
+    "asyncio>=3.4.3",
 ]
 
 requires-python = "==3.11.*"
