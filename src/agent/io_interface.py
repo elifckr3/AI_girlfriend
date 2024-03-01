@@ -145,6 +145,7 @@ def text_to_speech(text: str, voice_id: str) -> int:
 def text_to_speech_wss(text: str, voice_id: str) -> int:
     if os.environ.get(SPEECH_OFF):
         logging.debug("Speech is off")
+        logging.info("Response: %s"%text)
         return 200
 
     client = get_conf(TTS_CLIENT)

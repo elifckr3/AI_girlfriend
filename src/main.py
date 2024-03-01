@@ -6,7 +6,7 @@ import typer
 import threading
 import logging
 from src.personality_conf import PersonalityConfigPrompt
-from src.system_conf import SystemConfigPrompt, ENV_DATA
+from src.system_conf import SystemConfigPrompt, ENV_DATA, SPEECH_OFF
 from src.agent.base import BotAgent, BotMemoryUpdateType
 from src.agent.message import RoleTypes
 from src.agent.capability import Capability
@@ -163,8 +163,8 @@ def main(
     debug: bool = typer.Option(False, "--debug", help="Debug mode with DEBUG level logging"),
     default_bot: bool = typer.Option(False, "--default", help="Use default bot (Allan Watts)"),
     update_conf: bool = typer.Option(False, "--config", help="Toggle prompts to update system configuration"),
-    speach_off: bool = typer.Option(False, "--speech-off", help="Toggle speach off for debugging"),
-    cold_start: bool = typer.Option(False, "--cold-start", help="Toggle speach off for debugging"),
+    speech_off: bool = typer.Option(False, "--speech-off", help="Toggle speech off for debugging"),
+    cold_start: bool = typer.Option(False, "--cold-start", help="Toggle cold start to flush old messages"),
     # local_db: bool = False,
     # mock_api: bool = False,
 ):
@@ -200,8 +200,8 @@ def main(
         logging.debug(f"setting API keys: {key} to xxx ")
         os.environ[key] = value
 
-    if speach_off is True:
-        os.environ["SPEECH_OFF"] = "True"
+    if speech_off:
+        os.environ[SPEECH_OFF] = "True"
 
     if default_bot is True:
         agent = BotAgent.find_agent("Allan Watts")
