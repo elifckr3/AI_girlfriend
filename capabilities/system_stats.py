@@ -1,6 +1,5 @@
 import time
 from src.agent.capability import Capability
-from src.personality_conf import DummyCapabilityChoice
 import os
 import logging
 from datetime import datetime
@@ -9,7 +8,7 @@ from datetime import datetime
 class TimerCapability(Capability):
     @classmethod
     def register_capability(cls):
-        return cls(unique_name=DummyCapabilityChoice.SYSTEM_STATS, hotwords=["get system stats","system stats"])
+        return cls(unique_name="system_stats", hotwords=["get system stats","system stats"])
 
     def call(self):
 

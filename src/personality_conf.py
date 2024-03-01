@@ -63,7 +63,7 @@ class PersonalityConfigPrompt(Prompt):
             voice = self._prompt_new_agent_voice()
             personality_dna = self._prompt_new_agent_personality()
             mood_dna = self._prompt_new_agent_mood()
-            capabilities = self._prompt_new_agent_capabilities()
+            capabilities = [""] #self._prompt_new_agent_capabilities()
 
             agent = BotAgent.create(
                 name=name,

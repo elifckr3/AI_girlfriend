@@ -23,7 +23,7 @@ load_dotenv()
 def deepgram_trascription():
     try:
         # TODO new dg connection needs to be optimized 
-        logging.info('starting mic')
+        logging.info('starting mic...')
         api_key = os.environ.get(DEEPGRAM_KEY)
         # Open a microphone stream on the default input device
         microphone: Microphone
@@ -32,7 +32,6 @@ def deepgram_trascription():
         dg_connection = deepgram.listen.live.v("1")
         sentence_buffer = ''
         sentences_added = []
-        stime = 0
 
         def on_message(self, result, **kwargs):
             nonlocal sentence_buffer
@@ -41,7 +40,7 @@ def deepgram_trascription():
             if len(sentence) == 0:
                 return
             if len(sentence) < len(sentence_buffer):
-                logging.info(f"speaker: {sentence_buffer}")
+                logging.debug(f"speaker: {sentence_buffer}")
                 sentences_added.append(sentence_buffer)
                 sentence_buffer = ''
             sentence_buffer = sentence
@@ -56,14 +55,12 @@ def deepgram_trascription():
         def on_utterance_end(self, utterance_end, **kwargs):
             nonlocal sentences_added
             nonlocal sentence_buffer
-            nonlocal stime
             nonlocal microphone
-            logging.info(f"speaker: {sentence_buffer}")
+            logging.debug(f"speaker: {sentence_buffer}")
             sentences_added.append(sentence_buffer)
-            logging.info('stopped listening...')
+            logging.debug('stopped listening...')
             # print(f"\n\n{utterance_end}\n\n")
             microphone.finish()
-            stime = time()
             return 
 
         def on_error(self, error, **kwargs):
@@ -102,9 +99,6 @@ def deepgram_trascription():
         dg_connection.signal_exit()
         dg_connection.finish()
         final_text = " ".join(sentences_added)
-        tdiff = time()-stime
-
-        logging.info("Time taken for stt deepgram: %s"%tdiff)
 
         return final_text
     except Exception as e:

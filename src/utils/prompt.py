@@ -176,7 +176,7 @@ class Prompt(BaseModel, ABC):
                 q_dict["validate"] = StringValidator(empty_allowed=empty_allowed)
                 if q.multiline is not False:
                     q_dict["multiline"] = q.multiline
-                    q_dict["instruction"] = "  (press [Esc] [Enter] to submit)  \n"
+                    q_dict["instruction"] = "  (press [Esc] + [Enter] to submit)  \n"
 
             if q.qtype is QTypes.FLOAT or q.qtype is QTypes.INT:
                 q_dict["type"] = "text"

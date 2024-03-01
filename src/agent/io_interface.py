@@ -70,7 +70,6 @@ def speech_to_text() -> str:
 
 
 def text_to_text(messages_input: str) -> str | None:
-    stime = time()
     client = get_conf(TTT_CLIENT)
 
     logging.debug(f"TTT_CLIENT: {client}")
@@ -83,13 +82,10 @@ def text_to_text(messages_input: str) -> str | None:
 
         case TTT_CLIENTS.OPENAI.value:
             text = OpenAiClient().ttt(messages_input=messages_input)
+            logging.info("Agent Response: %s"%text)
 
         case _:
             raise ValueError(f"Invalid client type: {client}")
-
-    tdiff = time()-stime
-
-    logging.info("Time taken for GPTresponse: %s"%(tdiff))
 
     return text
 
@@ -145,7 +141,6 @@ def text_to_speech(text: str, voice_id: str) -> int:
 def text_to_speech_wss(text: str, voice_id: str) -> int:
     if os.environ.get(SPEECH_OFF):
         logging.debug("Speech is off")
-        logging.info("Response: %s"%text)
         return 200
 
     client = get_conf(TTS_CLIENT)
