@@ -195,7 +195,8 @@ class BotAgent(BaseModel):
         mood_dna: list[BotMoodAxiom],
         capabilities: list[str],
     ):
-        ip_address = get_ip_address()
+        # ip_address = get_ip_address()
+        ip_address = "0.0.0.0"
         logging.debug(f"IP Address: {ip_address}")
 
         if db_connection.exists(f"agent:{ip_address}:{name}"):
@@ -224,7 +225,8 @@ class BotAgent(BaseModel):
 
     @classmethod
     def find_agent(cls, name: str):
-        ip_address = get_ip_address()
+        # ip_address = get_ip_address()
+        ip_address = "0.0.0.0"
         logging.debug(f"IP Address: {ip_address}")
 
         bot_key = f"agent:{ip_address}:{name}"

@@ -12,6 +12,7 @@ from src.agent.message import RoleTypes
 from src.agent.capability import Capability
 from src.utils import timeit, pretty_console
 from src.utils.db import RedisConnect
+from src.dev_tools.db_management import create_new_db
 from typing import Annotated
 from queue import Queue
 
@@ -23,11 +24,11 @@ db = RedisConnect()
 
 
 class ThreadManager:
-    def __init__(self, agent: BotAgent, debug: bool = False):
+    def __init__(self, agent: BotAgent, debug: bool = False, cold_start: bool = False):
         launch_time = datetime.now(pytz.UTC)
         self.agent = agent
         self.debug = debug
-        self.cold_start = True
+        self.cold_start = cold_start
         self.listen_queue = Queue()
         self.response_queue = Queue()
         self.interupt_queue = Queue()
@@ -125,11 +126,14 @@ class ThreadManager:
 
     def single_thread(self):
         
-        #TODO make cold start dynamic with the function argument
+        if self.cold_start:
+            logging.debug("Flushing old msges")
+            self.agent.memory.full_message_history = []
+            
+        elif self.agent.memory.full_message_history == []:
+            self.cold_start = True
 
-        self.agent.memory.full_message_history = []
-
-        context = self.agent.manage_context(msgs='', cold_start=True)
+        context = self.agent.manage_context(msgs='', cold_start=self.cold_start)
 
         self.agent.speak(response=context)
 
@@ -156,22 +160,11 @@ class ThreadManager:
 
 @app.command()
 def main(
-    debug: Annotated[  # TODO i hate how these annotations force you to express the CLI without --flags
-        bool,
-        typer.Argument(help="Debug mode with DEBUG level logging"),
-    ] = False,
-    default_bot: Annotated[
-        bool,
-        typer.Argument(help="Use default bot (Allan Watts)"),
-    ] = False,
-    update_conf: Annotated[
-        bool,
-        typer.Argument(help="Toggle prompts to update system configuration"),
-    ] = False,
-    speach_off: Annotated[
-        bool,
-        typer.Argument(help="Toggle speach off for debugging"),
-    ] = False,
+    debug: bool = typer.Option(False, "--debug", help="Debug mode with DEBUG level logging"),
+    default_bot: bool = typer.Option(False, "--default", help="Use default bot (Allan Watts)"),
+    update_conf: bool = typer.Option(False, "--config", help="Toggle prompts to update system configuration"),
+    speach_off: bool = typer.Option(False, "--speach-off", help="Toggle speach off for debugging"),
+    cold_start: bool = typer.Option(False, "--cold-start", help="Toggle speach off for debugging"),
     # local_db: bool = False,
     # mock_api: bool = False,
 ):
@@ -195,6 +188,14 @@ def main(
 
     env_data = db.read(key=ENV_DATA)
 
+    if env_data is None:
+        # Creating Default DB because env variables were not found in redis
+        create_new_db()
+        env_data = db.read(key=ENV_DATA)
+
+        # Toggle cold start if db resets
+        cold_start = True
+
     for key, value in env_data.items():
         logging.debug(f"setting API keys: {key} to xxx ")
         os.environ[key] = value
@@ -210,7 +211,7 @@ def main(
 
     logging.info(f"Initializing agent bot: {agent.unique_name}")
 
-    ThreadManager(agent=agent, debug=debug).single_thread()
+    ThreadManager(agent=agent, debug=debug, cold_start=cold_start).single_thread()
 
 
 # if __name__ == "__main__":
