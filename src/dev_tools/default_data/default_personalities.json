@@ -4,7 +4,7 @@
         "voice_id": "r5MkZndaqAG50VL1H2fz",
         "personality_dna_path": "src/dev_tools/default_data/personalities/allan_watts/",
         "capabilities": [
-            "hail an uber"
+            "timer"
         ],
         "mood_dna": {
             "happy": "sing a song"

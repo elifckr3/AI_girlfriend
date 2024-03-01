@@ -8,4 +8,5 @@ class TimerCapability(Capability):
         return cls(unique_name="timer", hotwords=["call", "timer"])
 
     def call(self):
-        time.sleep(2)
+        print("TIMER called")
+        time.sleep(10)

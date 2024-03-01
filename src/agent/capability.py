@@ -21,9 +21,9 @@ class Capability(BaseModel, ABC):
         raise NotImplementedError
 
     @classmethod
-    def match_capability(cls, msg: str) -> Union["Capability", None]:
-        assert isinstance(msg, str), "msg must be a string"
-
+    def match_capability(cls, sentence: str) -> Union["Capability", None]:
+        assert isinstance(sentence, str), "msg must be a string"
+        msgs = sentence.split(" ")
         for file_name in os.listdir("capabilities"):
             if file_name.endswith(".py") and file_name != "__init__.py":
                 module_name = f"capabilities.{file_name[:-3]}"
@@ -45,9 +45,10 @@ class Capability(BaseModel, ABC):
                             # TODO fuzzy matching
                             # TODO hotword registration uniqueness
                             for hotword in capability.hotwords:
-                                if any(hotword.lower() in msg.lower() for msg in msg):
-                                    logging.debug(f"matched capability: {capability}")
-                                    return capability
+                                for msg in msgs:
+                                    if hotword.lower() in msg.lower():
+                                        logging.info(f"matched capability: {capability}")
+                                        return capability
 
         #     # TODO find from db ?
         return None
