@@ -37,7 +37,8 @@ class OpenAiClient:
     @timeit.PROFILE
     def ttt(self, messages_input: list[str]):
         msg = [{"role": "system", "content": messages_input}]
-        logging.debug("Sending msg to GPT: %s"%msg)
+        logging.debug("Sending msg to GPT: %s"%messages_input)
+        # print(messages_input)
         try:
             model = get_conf(OPENAI_TTT_MODEL)
             logging.debug(f"OPENAI TTT model: {model}")

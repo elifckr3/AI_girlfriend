@@ -163,7 +163,7 @@ def main(
     debug: bool = typer.Option(False, "--debug", help="Debug mode with DEBUG level logging"),
     default_bot: bool = typer.Option(False, "--default", help="Use default bot (Allan Watts)"),
     update_conf: bool = typer.Option(False, "--config", help="Toggle prompts to update system configuration"),
-    speach_off: bool = typer.Option(False, "--speach-off", help="Toggle speach off for debugging"),
+    speach_off: bool = typer.Option(False, "--speech-off", help="Toggle speach off for debugging"),
     cold_start: bool = typer.Option(False, "--cold-start", help="Toggle speach off for debugging"),
     # local_db: bool = False,
     # mock_api: bool = False,

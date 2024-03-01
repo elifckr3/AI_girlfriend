@@ -152,7 +152,6 @@ def text_to_speech_wss(text: str, voice_id: str) -> int:
     logging.debug(f"TTS_CLIENT: {client}")
 
     status = 0
-    audio_bytes = None
     match client:
         case TTS_CLIENTS.INTERNAL.value:
             pass

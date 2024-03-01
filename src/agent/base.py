@@ -126,10 +126,12 @@ class BotAgent(BaseModel):
 
     @property
     def last_10_messages(self):
-        start_index = max(0, len(self.memory.full_message_history) - 20)
+        total_messages = len(self.memory.full_message_history)
+        start_index = max(0, total_messages - 20)
         user_messages = [msg.model_dump() for msg in self.memory.full_message_history[start_index:-2] if msg.model_dump().get("role", "assistant") != "assistant"]
         messages = "\n".join(f"{i + 1}: {msg.get('role', 'role')}: {msg.get('content', 'content')}" for i, msg in enumerate(user_messages))
-        
+        if total_messages > 0:
+            messages += "\n\nProvided above are the previous messages you must keep these previous messages in context when replying to the user’s CURR_MESSAGE and can even reference a previous message."
         logging.debug("Previous Messages: \n%s" % messages)
 
         return messages
@@ -152,7 +154,7 @@ class BotAgent(BaseModel):
                 "personality_dna": self.personality_dna_prompt,
                 "mood_dna": self.metadata.mood_dna,
                 "curr_message": self.curr_message.get("content",""),
-                "last_10_messages": self.last_10_messages,
+                "previous_messages": self.last_10_messages,
             },
         )
         logging.debug(f"mood_evolve_prompt: {mood_evolve_prompt}")
@@ -167,7 +169,7 @@ class BotAgent(BaseModel):
                 "personality_dna": self.personality_dna_prompt,
                 "mood_instructions": self.metadata.mood_dna,
                 "curr_message": self.curr_message.get("content",""),
-                "last_10_messages": self.last_10_messages,
+                "previous_messages": self.last_10_messages,
             },
         )
         logging.debug(f"response_prompt: {response_prompt}")

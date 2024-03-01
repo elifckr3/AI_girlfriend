@@ -16,6 +16,6 @@ CURR_MESSAGE:
 
 {{ curr_message }}
 
-LAST_10_MESSAGES
+PREVIOUS_MESSAGES
 
-{{ last_10_messages }}
+{{ previous_messages }}
