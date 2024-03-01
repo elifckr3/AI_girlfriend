@@ -139,7 +139,7 @@ Here are some `FLAGS` you can use.
 You can use `FLAGS` like this:
 
 ```bash
-pdm run main --debug --default
+pdm run main --default
 ```
 
 To check all `FLAGS`
