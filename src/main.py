@@ -150,7 +150,9 @@ class ThreadManager:
 
             if isinstance(context, Capability):
                 logging.info(f"Calling capability: {context.unique_name}")
-                context.call(self.agent)
+                context = context.call()
+                if context:
+                    self.agent.speak(response=context)
 
             elif isinstance(context, str):
                 self.agent.save_message(context, role=RoleTypes.ASSISTANT)    

@@ -11,7 +11,7 @@ class TimerCapability(Capability):
     def register_capability(cls):
         return cls(unique_name=DummyCapabilityChoice.SYSTEM_STATS, hotwords=["get system stats","system stats"])
 
-    def call(self, agent):
+    def call(self):
 
         # Get system stats
         num_cpu_cores = os.cpu_count()
@@ -31,10 +31,5 @@ class TimerCapability(Capability):
         message += ", Current Date :%s"%formatted_date
 
         logging.debug(message)
-
-        # speak the response
-        agent.speak(response=message)
-
-        time.sleep(1)
         return message
 

@@ -10,4 +10,5 @@ class TimerCapability(Capability):
 
     def call(self):
         print("TIMER called")
-        time.sleep(10)
+        time.sleep(2)
+        return
