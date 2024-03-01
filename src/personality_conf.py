@@ -18,6 +18,7 @@ class PersonalityChoice(Enum):
 # TODO add db id to capability function
 class DummyCapabilityChoice(Enum):
     TIMEOUT = "timeout"
+    SYSTEM_STATS = "system_stats"
 
 
 # TODO - generalizing this will require a lot of user instructions
