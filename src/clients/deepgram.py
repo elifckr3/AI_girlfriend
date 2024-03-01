@@ -100,6 +100,7 @@ def deepgram_trascription():
             #     break
             sleep(0.1)
         dg_connection.signal_exit()
+        dg_connection.finish()
         final_text = " ".join(sentences_added)
         tdiff = time()-stime
 

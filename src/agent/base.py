@@ -130,7 +130,7 @@ class BotAgent(BaseModel):
         user_messages = [msg.model_dump() for msg in self.memory.full_message_history[start_index:-2] if msg.model_dump().get("role", "assistant") != "assistant"]
         messages = "\n".join(f"{i + 1}: {msg.get('role', 'role')}: {msg.get('content', 'content')}" for i, msg in enumerate(user_messages))
         
-        logging.info("Previous Messages: \n%s" % messages)
+        logging.debug("Previous Messages: \n%s" % messages)
 
         return messages
     
@@ -140,7 +140,7 @@ class BotAgent(BaseModel):
         for key, value in self.metadata.personality_dna.model_dump().items():
             personality_prompt += f"{key.capitalize()}:\n{value}\n\n"
 
-        logging.info("personality_prompt: \n%s" % personality_prompt)
+        logging.debug("personality_prompt: \n%s" % personality_prompt)
 
         return personality_prompt
 
