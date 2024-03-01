@@ -109,7 +109,7 @@ class BotAgent(BaseModel):
     def cold_start_prompt(self):
         cold_start_prompt = prompt_loader(
             PROMPT_TEMPLATE_PATH + "tts_cold_start.md",
-            {"personality_dna": self.metadata.personality_dna.model_dump()},
+            {"personality_dna": self.personality_dna_prompt},
         )
         logging.debug(f"cold_start_prompt: {cold_start_prompt}")
 
@@ -126,16 +126,32 @@ class BotAgent(BaseModel):
 
     @property
     def last_10_messages(self):
-        return [msg.model_dump() for msg in self.memory.full_message_history[-10:]]
+        start_index = max(0, len(self.memory.full_message_history) - 20)
+        user_messages = [msg.model_dump() for msg in self.memory.full_message_history[start_index:-2] if msg.model_dump().get("role", "assistant") != "assistant"]
+        messages = "\n".join(f"{i + 1}: {msg.get('role', 'role')}: {msg.get('content', 'content')}" for i, msg in enumerate(user_messages))
+        
+        logging.info("Previous Messages: \n%s" % messages)
+
+        return messages
+    
+    @property
+    def personality_dna_prompt(self):
+        personality_prompt = ""
+        for key, value in self.metadata.personality_dna.model_dump().items():
+            personality_prompt += f"{key.capitalize()}:\n{value}\n\n"
+
+        logging.info("personality_prompt: \n%s" % personality_prompt)
+
+        return personality_prompt
 
     @property
     def mood_evolver_prompt(self):
         mood_evolve_prompt = prompt_loader(
             PROMPT_TEMPLATE_PATH + "ttt_mood_evolver.md",
             {
-                "personality_dna": self.metadata.personality_dna.model_dump(),
+                "personality_dna": self.personality_dna_prompt,
                 "mood_dna": self.metadata.mood_dna,
-                "curr_message": self.curr_message,
+                "curr_message": self.curr_message.get("content",""),
                 "last_10_messages": self.last_10_messages,
             },
         )
@@ -148,9 +164,9 @@ class BotAgent(BaseModel):
         response_prompt = prompt_loader(
             PROMPT_TEMPLATE_PATH + "tts_response.md",
             {
-                "personality_dna": self.metadata.personality_dna.model_dump(),
+                "personality_dna": self.personality_dna_prompt,
                 "mood_instructions": self.metadata.mood_dna,
-                "curr_message": self.curr_message,
+                "curr_message": self.curr_message.get("content",""),
                 "last_10_messages": self.last_10_messages,
             },
         )

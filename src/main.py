@@ -124,13 +124,16 @@ class ThreadManager:
         threading.Thread(target=self.background_update_forever).start()
 
     def single_thread(self):
+        
+        #TODO make cold start dynamic with the function argument
+
         self.agent.memory.full_message_history = []
 
-        # context = self.agent.manage_context(msgs=[], cold_start=True)
+        context = self.agent.manage_context(msgs='', cold_start=True)
 
-        # self.agent.speak(response=context)
+        self.agent.speak(response=context)
 
-        time.sleep(1)
+        time.sleep(0.1)
 
         while True:
             msgs = self.agent.listen()
