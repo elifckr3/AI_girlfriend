@@ -121,13 +121,43 @@ For Windows
 To run the main pipeline, run the following command:
 
 ```bash
-pdm run main -p 1
+pdm run main 
 ```
 
-- `<Enter personality>`: Pass your desired personality
+Here are some `FLAGS` you can use.
 
-`Note: If you enter a name that do not exists in our personality list you will be given list of personalities to choose one from them.`
+`--debug`: Shows all the logs.
 
+`--default`: Load preset/default personality.
+
+`--config`: Toggle prompts to update system configuration.
+
+`--speech-off`:  Disables speech output, results are visible in the logs.
+
+`--cold-start`: Clears previous history to provide a fresh start for conversation.
+
+You can use `FLAGS` like this:
+
+```bash
+pdm run main --debug --default
+```
+
+To check all `FLAGS`
+
+```bash
+pdm run main --help
+```
+
+#### Error handling in main pipeline
+
+If you encounter any error during `pdm run main`, run the following:
+
+```bash
+pdm run reset_db
+```
+```bash
+pdm run upload_env
+```
 
 ## How to build a capability?
 
