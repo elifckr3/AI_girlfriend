@@ -54,6 +54,7 @@ ASSEMBLYAI_KEY = "assembly_key"
 
 # OTHER
 SPEECH_OFF = "speech_off"
+WHISPER_MIC = "whisper_mic"
 
 
 def get_conf(var_name: str):

@@ -44,11 +44,8 @@ def local_record_online_transcribe():
 
     recording = _speech_recon_lib()
 
-    stime = time()
     transcription = OpenAiClient().stt(recording)
 
-    tdiff = time()-stime
-    logging.info("Time taken for STT OpenAI Whisper: %s"%tdiff)
     return transcription
 
 

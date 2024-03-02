@@ -7,7 +7,7 @@ from src.clients.eleven_labs import eleven_labs_tts
 from src.clients.eleven_labs_wss import eleven_labs_wss_tts
 from src.clients.assembly import assembly_transcribe
 from src.clients.local_microphone import local_record_online_transcribe
-from src.system_conf import get_conf, STT_CLIENT, TTT_CLIENT, TTS_CLIENT, SPEECH_OFF
+from src.system_conf import get_conf, STT_CLIENT, TTT_CLIENT, TTS_CLIENT, SPEECH_OFF, WHISPER_MIC
 from pydub import AudioSegment
 from pydub.playback import play
 from time import time
@@ -47,11 +47,13 @@ def speech_to_text() -> str:
     text = None
     match client:
         case STT_CLIENTS.INTERNAL.value:
-            # Openai whisper implementation
-            # text = local_record_online_transcribe()
 
-            # Deepgram STT implementation
-            text = deepgram_trascription()
+            if os.environ.get(WHISPER_MIC):
+                # Openai whisper implementation
+                text = local_record_online_transcribe()
+            else:
+                # Deepgram STT implementation
+                text = deepgram_trascription()
 
             # logging.info(f"STT: {text}")
         case STT_CLIENTS.ASSEMBLY.value:

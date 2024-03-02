@@ -6,7 +6,7 @@ import typer
 import threading
 import logging
 from src.personality_conf import PersonalityConfigPrompt
-from src.system_conf import SystemConfigPrompt, ENV_DATA, SPEECH_OFF
+from src.system_conf import SystemConfigPrompt, ENV_DATA, SPEECH_OFF, WHISPER_MIC
 from src.agent.base import BotAgent, BotMemoryUpdateType
 from src.agent.message import RoleTypes
 from src.agent.capability import Capability
@@ -166,6 +166,7 @@ def main(
     update_conf: bool = typer.Option(False, "--config", help="Toggle prompts to update system configuration"),
     speech_off: bool = typer.Option(False, "--speech-off", help="Toggle speech off for debugging"),
     cold_start: bool = typer.Option(False, "--cold-start", help="Toggle cold start to flush old messages"),
+    whisper_mic: bool = typer.Option(False, "--whisper-mic", help="Enable this if you face error with deepgram"),
     # local_db: bool = False,
     # mock_api: bool = False,
 ):
@@ -203,6 +204,9 @@ def main(
 
     if speech_off:
         os.environ[SPEECH_OFF] = "True"
+
+    if whisper_mic:
+        os.environ[WHISPER_MIC] = "True"
 
     if default_bot is True:
         agent = BotAgent.find_agent("Allan Watts")
