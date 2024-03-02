@@ -122,6 +122,7 @@ class BotAgent(BaseModel):
         for message in reversed(self.memory.full_message_history):
             if message.role == RoleTypes.USER:
                 curr_message = message.model_dump()
+                break
         return curr_message.get("content","")
 
     @property
