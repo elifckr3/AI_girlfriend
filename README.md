@@ -16,14 +16,17 @@ At OpenHome, we believe in the power of community-driven development to create t
 
 # What sets OpenHome apart? Here, you'll find:
 
-<li><b>Accessibility:</b></li> Easy-to-understand codebase and well-documented features for all skill levels.
-<li><b>Innovation:</b></li>  A playground for your most creative ideas to take shape and evolve.
-<li><b>Community:</b></li>  A supportive and collaborative space where questions are welcomed, and knowledge is shared.
-<li><b>Open-Source:</b></li>  We're committed to being open-source and empowering people to create the technology they want.
+<b>Accessibility:</b> Easy-to-understand codebase and well-documented features for all skill levels.
+
+<b>Innovation:</b>  A playground for your most creative ideas to take shape and evolve.
+
+<b>Community:</b>  A supportive and collaborative space where questions are welcomed, and knowledge is shared.
+
+<b>Open-Source:</b>  We're committed to being open-source and empowering people to create the technology they want.
 
 
 ## Project Architecture Overview
-Work in Progress Technical Architecture: https://docs.google.com/document/d/1PInWfbWBY9571Hq4R0nf5Uj01agy6YVXV2UTBonUc4A/edit
+Work in Progress Technical Architecture: https://docs.google.com/document/d/1yp--z4FfSuFPeo2WAHFhK2l-vD85TCIgqeVTpSUI5xE/edit#heading=h.hug0acjqpx7j
 
 <b>The Heart of OpenHome:</b> A Dynamic, Ever-Evolving Core At the core of OpenHome is a unique and powerful loop that continuously evolves the personality of your smart speaker. This isn't just about responding to commands; it's about creating an experience that's deeply personal and constantly refreshing. Every interaction with OpenHome is a step towards a more nuanced and tailored experience.
 
