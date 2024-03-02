@@ -36,6 +36,7 @@ class CalendarCapability(Capability):
 
         while True:
             user_inquiry = agent.listen()
+            user_inquiry = user_inquiry.lower()
             logging.info(user_inquiry)
             
             if "current date" in user_inquiry:

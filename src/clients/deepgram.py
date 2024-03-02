@@ -33,7 +33,7 @@ def deepgram_trascription():
             dg_connection = deepgram.listen.live.v("1")
             sentence_buffer = ''
             sentences_added = []
-
+            LISTENING = False
             def on_message(self, result, **kwargs):
                 nonlocal sentence_buffer
                 nonlocal sentences_added
@@ -57,11 +57,14 @@ def deepgram_trascription():
                 nonlocal sentences_added
                 nonlocal sentence_buffer
                 nonlocal microphone
+                nonlocal LISTENING
                 logging.debug(f"speaker: {sentence_buffer}")
                 sentences_added.append(sentence_buffer)
                 logging.debug('stopped listening...')
                 # print(f"\n\n{utterance_end}\n\n")
                 microphone.finish()
+                LISTENING = False
+
                 return 
 
             def on_error(self, error, **kwargs):
@@ -93,12 +96,16 @@ def deepgram_trascription():
 
             # start microphone
             microphone.start()
-            while microphone.is_active():
+            LISTENING = True
+
+            while LISTENING:
                 # if not microphone.is_active():
                 #     break
                 sleep(0.1)
+
             dg_connection.signal_exit()
-            # dg_connection.finish()
+            dg_connection.finish()
+
             final_text = " ".join(sentences_added)
 
             return final_text

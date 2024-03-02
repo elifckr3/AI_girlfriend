@@ -138,7 +138,7 @@ class BotAgent(BaseModel):
             messages = "User Messages:\n" + user_messages
             messages += "\n\nYour Questions:\n" + agent_messages
             messages += "\n\nProvided above are the previous messages between user and you, you must keep these previous messages in context when replying to the user's CURR_MESSAGE and can even reference a previous message."
-        logging.info("Previous Messages: \n%s" % messages)
+        logging.debug("Previous Messages: \n%s" % messages)
 
         return messages
     
