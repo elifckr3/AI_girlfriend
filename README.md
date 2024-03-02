@@ -37,138 +37,139 @@ Work in Progress Technical Architecture: https://docs.google.com/document/d/1PIn
 
 <b>Audible Magic:</b> What good is a smart response if it can't be enjoyed? Our text-to-speech module brings the conversation to life, turning text responses into natural, fluent speech.
 
+Sure, here's the complete markdown for your GitHub README.md file:
 
 
-## Install and configure
+# OpenHome Installation Guide
 
-To get the project running locally install pdm using python3.11.
+Welcome to OpenHome! We're excited to have you join us on this journey to create an open-source AI smart speaker that learns and grows with you. Whether you're here to build, learn, or contribute, we've got you covered with this step-by-step guide to get OpenHome running on your system.
 
-Check your python version if it is below 3.11 run these two python related commands else you can directly run the curl command.
+## Prerequisites
 
-To add python repo to your system run the folowing deadsnakes command.
+Before you start, ensure you have the following installed on your system:
 
-```bash
-sudo add-apt-repository ppa:deadsnakes/ppa
-```
+- **Python 3.11**: The preferred Python version for OpenHome.
+- **Homebrew** (macOS users): For installing Python and other dependencies.
+- **PDM (Python Dependency Manager)**: For managing Python packages.
 
-After adding python repo to your system install python 3.11.
+## Installation Steps
 
+### For macOS Users
 
-```bash
-sudo apt install python3.11
-```
+1. **Install Homebrew** (if you haven't already):
+   ```sh
+   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+   ```
 
-You can install `curl` using the following command if it is not already installed.
+2. **Install Python 3.11** using Homebrew:
+   ```sh
+   brew install python@3.11
+   ```
 
-```bash
-sudo apt  install curl
-```
+3. **Install PDM**:
+   ```sh
+   curl -sSL https://pdm.fming.dev | python3 -
+   ```
 
-```bash
-curl -sSL https://pdm-project.org/install-pdm.py | python3 -
-```
+4. **Update your PATH**:
+   Add PDM to your PATH by inserting the following line into your `.zshrc` or `.bash_profile`:
+   ```sh
+   export PATH=/Users/your-username/.local/bin:$PATH
+   ```
+   Replace `your-username` with your macOS username.
 
-After install run the prompted command
+5. **Install MPV** for media playback:
+   ```sh
+   brew install mpv
+   ```
 
-```bash
-export PATH=/Users/your-username/.local/bin:$PATH
-```
+### For Linux Users
 
-Next install the required dependencies.
+1. **Ensure Python 3.11 is installed**:
+   If your Python version is below 3.11, add the deadsnakes PPA and install Python 3.11:
+   ```bash
+   sudo add-apt-repository ppa:deadsnakes/ppa
+   sudo apt install python3.11
+   ```
 
+2. **Install curl** (if not installed):
+   ```bash
+   sudo apt install curl
+   ```
 
-### Install dependencies
+3. **Install PDM**:
+   ```bash
+   curl -sSL https://pdm-project.org/install-pdm.py | python3 -
+   ```
 
-To install the required dependencies, run the following command:
+4. **Update your PATH**:
+   ```bash
+   echo 'export PATH=$HOME/.local/bin:$PATH' >> ~/.bashrc
+   source ~/.bashrc
+   ```
+
+5. **Fix PyAudio errors** (if any after running `pdm install`):
+   ```bash
+   sudo apt install python3.11-dev build-essential gcc
+   pdm install
+   ```
+
+6. **Install MPV** for media playback:
+   ```bash
+   sudo apt-get install mpv
+   ```
+
+## Install Dependencies
+
+Run the following command in the OpenHome directory to install required dependencies:
 
 ```bash
 pdm install
 ```
-After running `pdm install` command if you encounter the following error.
 
-![Error log](/assets/pyAudio_error.png?raw=true "PyAudio Error")
+## Running OpenHome
 
-Run the following command to fix PyAudio error.
-
-```bash
-sudo apt install python3.11-dev build-essential gcc
-```
-And again run.
+To start OpenHome, run:
 
 ```bash
-pdm install
+pdm run main
 ```
 
-You can also use homebrew to install these modules. brew install ffmpeg, portaudio, etc
+### Flags
 
-## How to install mpv?
+- `--debug`: Show all logs.
+- `--default`: Load the preset/default personality.
+- `--config`: Toggle prompts to update system configuration.
+- `--speech-off`: Disable speech output, with results visible in logs.
+- `--cold-start`: Clear previous history for a fresh conversation start.
 
-For linux
-```bash
-apt-get install mpv
-```
-For Mac
-```bash
-brew install mpv
-```
-
-For Windows
-- https://mpv.io/installation/
-
-
-## How to run the main pipeline?
-
-To run the main pipeline, run the following command:
-
-```bash
-pdm run main 
-```
-
-Here are some `FLAGS` you can use.
-
-`--debug`: Shows all the logs.
-
-`--default`: Load preset/default personality.
-
-`--config`: Toggle prompts to update system configuration.
-
-`--speech-off`:  Disables speech output, results are visible in the logs.
-
-`--cold-start`: Clears previous history to provide a fresh start for conversation.
-
-You can use `FLAGS` like this:
+Example:
 
 ```bash
 pdm run main --default
 ```
 
-To check all `FLAGS`
+For a full list of flags, run:
 
 ```bash
 pdm run main --help
 ```
 
-#### Error handling in main pipeline
+### Error Handling
 
-If you encounter any error during `pdm run main`, run the following:
+If you encounter errors, reset the database and upload environment variables:
 
 ```bash
 pdm run reset_db
-```
-```bash
 pdm run upload_env
 ```
 
-## How to build a capability?
+## Building a Capability
 
-Copy and paste a new version of template.py in the capabilities/ folder.
+To add new capabilities to OpenHome:
 
-Register the capability as follows alongside it's function call
-
-#TODO 
-- [ ] test tool
-- [ ] unique hotword matching
-- [ ] I/O passing to caller
+1. Copy and modify `template.py` in the `capabilities/` folder.
+2. Register the capability with its function call, as shown below:
 
 ```python
 class TimerCapability(Capability):
@@ -177,5 +178,5 @@ class TimerCapability(Capability):
         return cls(unique_name="timer", hotwords=["call", "timer"])
 
     def call(self):
-        time.sleep(2)
+        # Your code here
 ```
