@@ -135,6 +135,7 @@ class ThreadManager:
 
         context = self.agent.manage_context(msgs='', cold_start=self.cold_start)
 
+        self.agent.save_message(context, role=RoleTypes.ASSISTANT)
         self.agent.speak(response=context)
 
         time.sleep(0.1)

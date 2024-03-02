@@ -98,12 +98,12 @@ def deepgram_trascription():
                 #     break
                 sleep(0.1)
             dg_connection.signal_exit()
-            dg_connection.finish()
+            # dg_connection.finish()
             final_text = " ".join(sentences_added)
 
             return final_text
         except Exception as e:
-            logging.WARN(f"Could not open socket, Make sure your mic is connected!")
+            logging.error("Could not open socket, Make sure your mic is connected!")
             sleep(1)
             logging.info(f"Retrying Deepgram Connection!")
-            return
+            continue

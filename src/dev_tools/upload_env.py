@@ -15,7 +15,7 @@ def upload_env():
         OPENAI_KEY: "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",
         ELEVEN_LABS_KEY: "15dec7728128dcdc7254dcfa7c1ab947",
         ASSEMBLYAI_KEY: "e3127d96f3274285b250f528b7818bb9",
-        DEEPGRAM_KEY: "77d231a7c1a5ca16bb4191d97d76af1fced0c017",
+        DEEPGRAM_KEY: "0479795b99af48e055385c27ecbdc89c9775949e",
     }
 
     db.write(key=ENV_DATA, data=enviroment)
