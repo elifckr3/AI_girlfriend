@@ -1,11 +1,10 @@
-import time
 from src.agent.capability import Capability
 import os
 import logging
 from datetime import datetime
 
 
-class TimerCapability(Capability):
+class SystemstatsCapability(Capability):
     @classmethod
     def register_capability(cls):
         return cls(unique_name="system_stats", hotwords=["get system stats","system stats"])
