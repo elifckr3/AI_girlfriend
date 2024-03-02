@@ -129,14 +129,15 @@ class BotAgent(BaseModel):
         total_messages = len(self.memory.full_message_history)
         start_index = max(0, total_messages - 20)
         user_messages_ = [msg.model_dump() for msg in self.memory.full_message_history[start_index:-2] if msg.model_dump().get("role") != "assistant"]
-        user_messages = "\n".join(f"{i + 1}: User: {msg.get('content', 'content')}" for i, msg in enumerate(user_messages_))
+        user_messages = "\n".join(f"{i + 1}: user: {msg.get('content', 'content')}" for i, msg in enumerate(user_messages_))
 
-        agent_messages_ = [msg.model_dump() for msg in self.memory.full_message_history[start_index:-1] if msg.model_dump().get("role") != "user"]
-        agent_messages = "\n".join(f"{i + 1}: You: {msg.get('content', 'content')}" for i, msg in enumerate(agent_messages_))
+        # agent_messages_ = [msg.model_dump() for msg in self.memory.full_message_history[start_index:-1] if msg.model_dump().get("role") != "user"]
+        # agent_messages = "\n".join(f"{i + 1}: You: {msg.get('content', 'content')}" for i, msg in enumerate(agent_messages_))
 
         if total_messages > 0:
-            messages = "User Messages:\n" + user_messages
-            messages += "\n\nYour Questions:\n" + agent_messages
+            messages = user_messages
+            # messages = "User Messages:\n" + user_messages
+            # messages += "\n\nYour Questions:\n" + agent_messages
             messages += "\n\nProvided above are the previous messages between user and you, you must keep these previous messages in context when replying to the user's CURR_MESSAGE and can even reference a previous message."
         logging.debug("Previous Messages: \n%s" % messages)
 
