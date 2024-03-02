@@ -145,6 +145,8 @@ pdm run main
 - `--config`: Toggle prompts to update system configuration.
 - `--speech-off`: Disable speech output, with results visible in logs.
 - `--cold-start`: Clear previous history for a fresh conversation start.
+- `--mic-off`: Disable mic, you will be prompted instead to write user message.
+- `--whisper-mic`: This will disable deepgram microphone and enable openai whisper.
 
 Example:
 
@@ -168,6 +170,8 @@ pdm run upload_env
 ```
 
 ## Building a Capability
+
+Detailed Guide: https://docs.google.com/document/d/1CQtW3JeNSXF2qKMfYVH5qPJdQtV0XeoyF9_1bbVBVxk/edit?usp=sharing
 
 To add new capabilities to OpenHome:
 
