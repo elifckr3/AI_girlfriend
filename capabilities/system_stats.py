@@ -9,7 +9,9 @@ class SystemstatsCapability(Capability):
     def register_capability(cls):
         return cls(unique_name="system_stats", hotwords=["get system stats","system stats"])
 
-    def call(self):
+    def call(self,agent):
+        initial_message = "Getting system stats, please wait."
+        agent.speak(response=initial_message)
 
         # Get system stats
         num_cpu_cores = os.cpu_count()

@@ -21,86 +21,89 @@ from src.system_conf import (
 load_dotenv()
 
 def deepgram_trascription():
-    try:
-        # TODO new dg connection needs to be optimized 
-        logging.info('starting mic...')
-        api_key = os.environ.get(DEEPGRAM_KEY)
-        # Open a microphone stream on the default input device
-        microphone: Microphone
-        dg_connection: DeepgramClient
-        deepgram = DeepgramClient(api_key)
-        dg_connection = deepgram.listen.live.v("1")
-        sentence_buffer = ''
-        sentences_added = []
+    while True:
+        try:
+            # TODO new dg connection needs to be optimized 
+            logging.info('starting mic...')
+            api_key = os.environ.get(DEEPGRAM_KEY)
+            # Open a microphone stream on the default input device
+            microphone: Microphone
+            dg_connection: DeepgramClient
+            deepgram = DeepgramClient(api_key)
+            dg_connection = deepgram.listen.live.v("1")
+            sentence_buffer = ''
+            sentences_added = []
 
-        def on_message(self, result, **kwargs):
-            nonlocal sentence_buffer
-            nonlocal sentences_added
-            sentence = result.channel.alternatives[0].transcript
-            if len(sentence) == 0:
-                return
-            if len(sentence) < len(sentence_buffer):
+            def on_message(self, result, **kwargs):
+                nonlocal sentence_buffer
+                nonlocal sentences_added
+                sentence = result.channel.alternatives[0].transcript
+                if len(sentence) == 0:
+                    return
+                if len(sentence) < len(sentence_buffer):
+                    logging.debug(f"speaker: {sentence_buffer}")
+                    sentences_added.append(sentence_buffer)
+                    sentence_buffer = ''
+                sentence_buffer = sentence
+
+
+            # def on_metadata(self, metadata, **kwargs):
+            #     print(f"\n\n{metadata}\n\n")
+
+            # def on_speech_started(self, speech_started, **kwargs):
+            #     print(f"\n\n{speech_started}\n\n")
+
+            def on_utterance_end(self, utterance_end, **kwargs):
+                nonlocal sentences_added
+                nonlocal sentence_buffer
+                nonlocal microphone
                 logging.debug(f"speaker: {sentence_buffer}")
                 sentences_added.append(sentence_buffer)
-                sentence_buffer = ''
-            sentence_buffer = sentence
+                logging.debug('stopped listening...')
+                # print(f"\n\n{utterance_end}\n\n")
+                microphone.finish()
+                return 
 
+            def on_error(self, error, **kwargs):
+                print(f"\n\n{error}\n\n")
 
-        # def on_metadata(self, metadata, **kwargs):
-        #     print(f"\n\n{metadata}\n\n")
+            dg_connection.on(LiveTranscriptionEvents.Transcript, on_message)
+            # dg_connection.on(LiveTranscriptionEvents.Metadata, on_metadata)
+            # dg_connection.on(LiveTranscriptionEvents.SpeechStarted, on_speech_started)
+            dg_connection.on(LiveTranscriptionEvents.UtteranceEnd, on_utterance_end)
+            dg_connection.on(LiveTranscriptionEvents.Error, on_error)
 
-        # def on_speech_started(self, speech_started, **kwargs):
-        #     print(f"\n\n{speech_started}\n\n")
+            options: LiveOptions = LiveOptions(
+                model="nova-2-general",
+                punctuate=False,
+                language="en-US",
+                encoding="linear16",
+                channels=1,
+                sample_rate=16000, # To get UtteranceEnd, the following must be set:
+                interim_results=True,
+                utterance_end_ms="1000",
+                vad_events=True,
+                endpointing=100
+            )
+            dg_connection.start(options)
 
-        def on_utterance_end(self, utterance_end, **kwargs):
-            nonlocal sentences_added
-            nonlocal sentence_buffer
-            nonlocal microphone
-            logging.debug(f"speaker: {sentence_buffer}")
-            sentences_added.append(sentence_buffer)
-            logging.debug('stopped listening...')
-            # print(f"\n\n{utterance_end}\n\n")
-            microphone.finish()
-            return 
+            logging.info('listening...')
+            # Open a microphone stream on the default input device
+            microphone: Microphone = Microphone(dg_connection.send)
 
-        def on_error(self, error, **kwargs):
-            print(f"\n\n{error}\n\n")
+            # start microphone
+            microphone.start()
+            while microphone.is_active():
+                # if not microphone.is_active():
+                #     break
+                sleep(0.1)
+            dg_connection.signal_exit()
+            dg_connection.finish()
+            final_text = " ".join(sentences_added)
 
-        dg_connection.on(LiveTranscriptionEvents.Transcript, on_message)
-        # dg_connection.on(LiveTranscriptionEvents.Metadata, on_metadata)
-        # dg_connection.on(LiveTranscriptionEvents.SpeechStarted, on_speech_started)
-        dg_connection.on(LiveTranscriptionEvents.UtteranceEnd, on_utterance_end)
-        dg_connection.on(LiveTranscriptionEvents.Error, on_error)
-
-        options: LiveOptions = LiveOptions(
-            model="nova-2-general",
-            punctuate=False,
-            language="en-US",
-            encoding="linear16",
-            channels=1,
-            sample_rate=16000, # To get UtteranceEnd, the following must be set:
-            interim_results=True,
-            utterance_end_ms="1000",
-            vad_events=True,
-            endpointing=100
-        )
-        dg_connection.start(options)
-
-        logging.info('listening...')
-        # Open a microphone stream on the default input device
-        microphone: Microphone = Microphone(dg_connection.send)
-
-        # start microphone
-        microphone.start()
-        while microphone.is_active():
-            # if not microphone.is_active():
-            #     break
-            sleep(0.1)
-        dg_connection.signal_exit()
-        dg_connection.finish()
-        final_text = " ".join(sentences_added)
-
-        return final_text
-    except Exception as e:
-        logging.WARN(f"Could not open socket: {e}")
-        return
+            return final_text
+        except Exception as e:
+            logging.WARN(f"Could not open socket, Make sure your mic is connected!")
+            sleep(1)
+            logging.info(f"Retrying Deepgram Connection!")
+            return

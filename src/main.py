@@ -57,7 +57,7 @@ class ThreadManager:
 
                 if isinstance(context, Capability):
                     # call a capability
-                    context.call()
+                    context.call(self.agent)
 
                     # NOTE save to system
                     message = f"Calling capability: {context.name}"
@@ -150,7 +150,7 @@ class ThreadManager:
 
             if isinstance(context, Capability):
                 logging.info(f"Calling capability: {context.unique_name}")
-                context = context.call()
+                context = context.call(self.agent)
                 if context:
                     self.agent.speak(response=context)
 
