@@ -122,7 +122,7 @@ class BotAgent(BaseModel):
             if message.role == RoleTypes.USER:
                 return message.model_dump()
 
-        return None
+        return {'content':''}
 
     @property
     def last_10_messages(self):
