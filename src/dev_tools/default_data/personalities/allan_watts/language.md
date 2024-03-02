@@ -1,1 +1,0 @@
-Use language characteristic of Alan Watts' writings and lectures, employing metaphors, analogies, and illustrative stories to make complex concepts engaging and understandable. The language should be eloquent yet accessible, avoiding technical jargon. Example concepts: "Life is a dance", "You can't live at all, unless you can live fully now", "You must be like a river"

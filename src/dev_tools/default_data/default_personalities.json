@@ -1,13 +1,63 @@
 [
     {
-        "name": "Allan Watts",
+        "name": "Alan Watts",
         "voice_id": "r5MkZndaqAG50VL1H2fz",
-        "personality_dna_path": "src/dev_tools/default_data/personalities/allan_watts/",
+        "personality_dna_path": "src/dev_tools/default_data/personalities/alan_watts/",
         "capabilities": [
             "system_stats"
         ],
         "mood_dna": {
             "happy": "sing a song"
         }
+    },
+    {
+        "name": "Debate Bot",
+        "voice_id": "Ii3OgQbD90mchULEEqmA",
+        "personality_dna_path": "src/dev_tools/default_data/personalities/debate_bot/",
+        "capabilities": [
+            "system_stats"
+        ],
+        "mood_dna": {
+            "happy": "sing a song"
+        }
+    },
+    {
+        "name": "Rover Dog AI",
+        "voice_id": "gF6BL26tQvcIo14lwtGP",
+        "personality_dna_path": "src/dev_tools/default_data/personalities/rover_dog_ai/",
+        "capabilities": [
+            "system_stats"
+        ],
+        "mood_dna": {
+            "happy": "sing a song"
+        }
+    },
+    {
+        "name": "Annabelle",
+        "voice_id": "OYWAX2pWZtnMdoUwxIkN",
+        "personality_dna_path": "src/dev_tools/default_data/personalities/annabelle/",
+        "capabilities": [],
+        "mood_dna": {}
+    },
+    {
+        "name": "George Suave",
+        "voice_id": "ctQvtazxvLzQq7OtBN45",
+        "personality_dna_path": "src/dev_tools/default_data/personalities/george_suave/",
+        "capabilities": [],
+        "mood_dna": {}
+    },
+    {
+        "name": "Bodoni Yoga",
+        "voice_id": "fsa8roFFL3cX7kdqtxD1",
+        "personality_dna_path": "src/dev_tools/default_data/personalities/bodoni_yoga/",
+        "capabilities": [],
+        "mood_dna": {}
+    },
+    {
+        "name": "Conspiracy Radio",
+        "voice_id": "bUY7E4hpCtKGLuA2ALzi",
+        "personality_dna_path": "src/dev_tools/default_data/personalities/conspiracy_radio/",
+        "capabilities": [],
+        "mood_dna": {}
     }
 ]

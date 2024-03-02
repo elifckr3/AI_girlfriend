@@ -1,0 +1,1 @@
+Use language characteristic of Alan Watts' writings and lectures, employing metaphors, analogies, and illustrative stories to make complex concepts engaging and understandable. The language should be eloquent yet accessible, avoiding technical jargon. 

@@ -162,7 +162,7 @@ class ThreadManager:
 @app.command()
 def main(
     debug: bool = typer.Option(False, "--debug", help="Debug mode with DEBUG level logging"),
-    default_bot: bool = typer.Option(False, "--default", help="Use default bot (Allan Watts)"),
+    default_bot: bool = typer.Option(False, "--default", help="Use default bot (Alan Watts)"),
     update_conf: bool = typer.Option(False, "--config", help="Toggle prompts to update system configuration"),
     speech_off: bool = typer.Option(False, "--speech-off", help="Toggle speech off for debugging"),
     cold_start: bool = typer.Option(False, "--cold-start", help="Toggle cold start to flush old messages"),
@@ -208,8 +208,9 @@ def main(
     if whisper_mic:
         os.environ[WHISPER_MIC] = "True"
 
+    print("Default bot status:", default_bot)
     if default_bot is True:
-        agent = BotAgent.find_agent("Allan Watts")
+        agent = BotAgent.find_agent("Alan Watts")
 
     else:
         agent = PersonalityConfigPrompt().run()
