@@ -118,11 +118,11 @@ class BotAgent(BaseModel):
     @property
     def curr_message(self):
         logging.debug(f"FULL MSG HIST: {self.memory.full_message_history}")
+        curr_message = {}
         for message in reversed(self.memory.full_message_history):
             if message.role == RoleTypes.USER:
-                return message.model_dump()
-
-        return {'content':''}
+                curr_message = message.model_dump()
+        return curr_message.get("content","")
 
     @property
     def last_10_messages(self):
@@ -160,7 +160,7 @@ class BotAgent(BaseModel):
             {
                 "personality_dna": self.personality_dna_prompt,
                 "mood_dna": self.metadata.mood_dna,
-                "curr_message": self.curr_message.get("content",""),
+                "curr_message": self.curr_message,
                 "previous_messages": self.last_10_messages,
             },
         )
@@ -175,7 +175,7 @@ class BotAgent(BaseModel):
             {
                 "personality_dna": self.personality_dna_prompt,
                 "mood_instructions": self.metadata.mood_dna,
-                "curr_message": self.curr_message.get("content",""),
+                "curr_message": self.curr_message,
                 "previous_messages": self.last_10_messages,
             },
         )
