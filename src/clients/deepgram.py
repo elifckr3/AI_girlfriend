@@ -75,7 +75,7 @@ def deepgram_trascription():
 
             options: LiveOptions = LiveOptions(
                 model="nova-2-general",
-                punctuate=False,
+                punctuate=True,
                 language="en-US",
                 encoding="linear16",
                 channels=1,
