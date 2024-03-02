@@ -6,7 +6,7 @@ import typer
 import threading
 import logging
 from src.personality_conf import PersonalityConfigPrompt
-from src.system_conf import SystemConfigPrompt, ENV_DATA, SPEECH_OFF, WHISPER_MIC
+from src.system_conf import SystemConfigPrompt, ENV_DATA, SPEECH_OFF, WHISPER_MIC, MIC_OFF
 from src.agent.base import BotAgent, BotMemoryUpdateType
 from src.agent.message import RoleTypes
 from src.agent.capability import Capability
@@ -142,8 +142,6 @@ class ThreadManager:
         while True:
             msgs = self.agent.listen()
 
-            logging.info(f"User Message: {msgs}")
-
             self.agent.save_message(msgs, role=RoleTypes.USER)
 
             context = self.agent.manage_context(msgs)
@@ -164,7 +162,8 @@ def main(
     debug: bool = typer.Option(False, "--debug", help="Debug mode with DEBUG level logging"),
     default_bot: bool = typer.Option(False, "--default", help="Use default bot (Alan Watts)"),
     update_conf: bool = typer.Option(False, "--config", help="Toggle prompts to update system configuration"),
-    speech_off: bool = typer.Option(False, "--speech-off", help="Toggle speech off for debugging"),
+    speech_off: bool = typer.Option(False, "--speech-off", help="Toggle speech for debugging"),
+    mic_off: bool = typer.Option(False, "--mic-off", help="Toggle mic for debugging"),
     cold_start: bool = typer.Option(False, "--cold-start", help="Toggle cold start to flush old messages"),
     whisper_mic: bool = typer.Option(False, "--whisper-mic", help="Enable this if you face error with deepgram"),
     # local_db: bool = False,
@@ -207,6 +206,9 @@ def main(
 
     if whisper_mic:
         os.environ[WHISPER_MIC] = "True"
+    
+    if mic_off:
+        os.environ[MIC_OFF] = "True"
 
     print("Default bot status:", default_bot)
     if default_bot is True:

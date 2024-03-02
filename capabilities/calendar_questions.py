@@ -62,7 +62,7 @@ class CalendarCapability(Capability):
 
             # Store user inquiry and response in history
             self.user_history.append("Question: %s"%user_inquiry)
-            self.user_history.append(answer)
+            self.user_history.append("Answer: %s"%answer)
 
             logging.info(answer)
             answer += ", anything else ?"
